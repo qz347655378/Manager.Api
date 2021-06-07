@@ -1,15 +1,19 @@
 ﻿using Common.Enum;
 using Common.Secure;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.System
 {
     [Table("UserInfo")]
+    [Index("Account", IsUnique = true)]
     public class UserInfo : Entity
     {
         /// <summary>
         /// 账号
         /// </summary>
+        [Required]
         public string Account { get; set; }
 
         /// <summary>
@@ -25,6 +29,7 @@ namespace Models.System
         /// <summary>
         /// 密码 默认密码123456
         /// </summary>
+        [Required]
         public string Password { get; set; } = EncryptHelper.Hash256Encrypt("123456");
         /// <summary>
         /// 联系电话
