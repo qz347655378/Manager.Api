@@ -40,6 +40,11 @@ namespace API
         {
             //设置跨域
             services.AddCors(c => c.AddPolicy("any", builder => builder.WithOrigins("*").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
+            //添加数据库支持
+            // services.AddScoped<DbContext,DAL.ManagerDbContext>();
+            var connectionStr = Configuration.GetConnectionString("ManagerConnection");
+            services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("Models")));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mananger.API", Version = "v1", Description = "Manager框架API" });
@@ -97,9 +102,7 @@ namespace API
                 setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //默认日期格式化
             });
 
-            //添加数据库支持
-            var connectionStr = Configuration.GetConnectionString("ManagerConnection");
-            services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("MiZhen.DAL")));
+
 
         }
 

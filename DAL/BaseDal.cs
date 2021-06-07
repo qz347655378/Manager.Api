@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,15 +47,15 @@ namespace DAL
         public T Add(T model)
         {
             // _dbContext.Entry(model).State = EntityState.Added;
-            _dbContext.Set<T>().Add(model);
-            return _dbContext.SaveChanges() > 0 ? model : null;
+            var entity = _dbContext.Set<T>().Add(model).Entity;
+            return _dbContext.SaveChanges() > 0 ? entity : null;
 
         }
 
         public async Task<T> AddAsync(T model)
         {
-            await _dbContext.Set<T>().AddAsync(model);
-            return await _dbContext.SaveChangesAsync() > 0 ? model : null;
+            var entity = _dbContext.Set<T>().AddAsync(model).AsTask().Result.Entity;
+            return await _dbContext.SaveChangesAsync() > 0 ? entity : null;
 
         }
 
@@ -98,8 +97,8 @@ namespace DAL
         /// <returns></returns>
         public T Edit(T model)
         {
-            _dbContext.Set<T>().Update(model);
-            return _dbContext.SaveChanges() > 0 ? model : null;
+            var entity = _dbContext.Set<T>().Update(model).Entity;
+            return _dbContext.SaveChanges() > 0 ? entity : null;
         }
 
         /// <summary>
@@ -109,8 +108,8 @@ namespace DAL
         /// <returns></returns>
         public async Task<T> EditAsync(T model)
         {
-            _dbContext.Set<T>().Update(model);
-            return await _dbContext.SaveChangesAsync() > 0 ? model : null;
+            var entity = _dbContext.Set<T>().Update(model).Entity;
+            return await _dbContext.SaveChangesAsync() > 0 ? entity : null;
         }
 
 
@@ -122,8 +121,7 @@ namespace DAL
         /// <returns></returns>
         public IQueryable<T> ExecuteCommand(string sql, params object[] parameters)
         {
-            var list = _dbContext.Set<T>().FromSqlRaw(sql, parameters);
-            return list;
+            return _dbContext.Set<T>().FromSqlRaw(sql, parameters);
         }
 
         /// <summary>
