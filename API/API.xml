@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>API</name>
+    </assembly>
+    <members>
+        <member name="M:API.Controllers.BaseController.GetUserByJwtToken">
+            <summary>
+            获取token中的用户信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:API.Controllers.UserInfo.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:API.Controllers.UserInfo.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:API.Controllers.UserInfo.Mobile">
+            <summary>
+            联系号码
+            </summary>
+        </member>
+        <member name="P:API.Controllers.UserInfo.Nickname">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="M:API.Controllers.LoginController.LoginAsync(API.ViewModel.Login.LoginRequestModel)">
+            <summary>
+            用户登录
+            </summary>
+            <param name="model"></param>
+            <returns>返回token及token过期时间</returns>
+        </member>
+        <member name="T:API.Core.AutofacRegister">
+            <summary>
+            通过反射的方式实现注入
+            </summary>
+        </member>
+        <member name="F:API.Core.ConfigHelper._configuration">
+            <summary>
+            The configuration
+            </summary>
+        </member>
+        <member name="M:API.Core.ConfigHelper.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:API.Core.ConfigHelper"/> class.
+            </summary>
+        </member>
+        <member name="M:API.Core.ConfigHelper.GetConfig(System.String)">
+            <summary>
+            Gets the configuration.
+            </summary>
+            <param name="key">The key.</param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Core.ConfigHelper.GetConfigToString(System.String)">
+             <summary>
+            获取字符串配置
+             </summary>
+             <param name="key">The key.</param>
+             <returns></returns>
+        </member>
+        <member name="M:API.Core.ConfigHelper.GetConfigToInt(System.String)">
+            <summary>
+            查询配置，返回整数
+            </summary>
+            <param name="key">键名</param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Core.ConfigHelper.GetConfigToBool(System.String)">
+            <summary>
+            查询配置，返回整数
+            </summary>
+            <param name="key">键名</param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Core.JwtHelper.BuildJwtToken(System.Collections.Generic.IEnumerable{System.Security.Claims.Claim})">
+            <summary>
+            创建JWTToken
+            </summary>
+            <param name="claims"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Core.JwtHelper.GetTimeStamp(System.DateTime)">
+            <summary>
+            获取时间戳  13位
+            </summary>
+            <param name="dtime">The dtime.</param>
+            <returns></returns>
+        </member>
+        <member name="T:API.ViewModel.Login.LoginRequestModel">
+            <summary>
+            登录请求模型
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.Login.LoginRequestModel.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.Login.LoginRequestModel.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.Login.LoginRequestModel.Captcha">
+            <summary>
+            验证码
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.Login.LoginResponseModel.Token">
+            <summary>
+            授权令牌
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.Login.LoginResponseModel.Expired">
+            <summary>
+            过期时间
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.ResponseResult`1.Code">
+            <summary>
+            请求结果代码
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.ResponseResult`1.Msg">
+            <summary>
+            请求出错时的出错信息
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.ResponseResult`1.Data">
+            <summary>
+            数据
+            </summary>
+        </member>
+    </members>
+</doc>
