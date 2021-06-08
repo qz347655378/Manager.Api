@@ -1,12 +1,12 @@
-﻿using IBLL;
-using IBLL.System;
+﻿using IBLL.System;
+using IDAL;
 using Models.System;
 
 namespace BLL.System
 {
     public class RoleInfoBll : BaseBll<RoleInfo>, IRoleInfoBLl
     {
-        public RoleInfoBll(IBaseBll<RoleInfo> currentDal) : base(currentDal)
+        public RoleInfoBll(IBaseDal<RoleInfo> currentDal) : base(currentDal)
         {
         }
     }

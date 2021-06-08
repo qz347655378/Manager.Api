@@ -1,4 +1,4 @@
-﻿using IBLL;
+﻿using IDAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +20,9 @@ namespace BLL
     ///  基本形式： where T : new()
     public class BaseBll<T> where T : class, new()
     {
-        private readonly IBaseBll<T> _currentDal;
+        private readonly IBaseDal<T> _currentDal;
 
-        public BaseBll(IBaseBll<T> currentDal)
+        public BaseBll(IBaseDal<T> currentDal)
         {
             _currentDal = currentDal;
         }

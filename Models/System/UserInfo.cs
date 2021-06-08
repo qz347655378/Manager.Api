@@ -13,7 +13,7 @@ namespace Models.System
         /// <summary>
         /// 账号
         /// </summary>
-        [Required,MaxLength(50)]
+        [Required, MaxLength(50)]
         public string Account { get; set; }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Models.System
         /// <summary>
         /// 密码 默认密码123456
         /// </summary>
-        [Required,MaxLength(256)]
+        [Required, MaxLength(256)]
         public string Password { get; set; } = EncryptHelper.Hash256Encrypt("123456");
         /// <summary>
         /// 联系电话

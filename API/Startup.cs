@@ -7,11 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Serilog;
+using Serilog.Sinks.MSSqlServer;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.IO;
@@ -37,12 +40,31 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
+
             //设置跨域
             services.AddCors(c => c.AddPolicy("any", builder => builder.WithOrigins("*").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
             //添加数据库支持
             // services.AddScoped<DbContext,DAL.ManagerDbContext>();
             var connectionStr = Configuration.GetConnectionString("ManagerConnection");
             services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("Models")));
+
+            //配置Serilog.AspNetCore 新的日志组件
+            services.AddLogging(builder =>
+            {
+                var sinkOptionsSection = Configuration.GetSection("Serilog:SinkOptions");
+                //  var columnOptionsSection = Configuration.GetSection("Serilog:ColumnOptions");
+                builder.ClearProviders();
+                //配置日志参数
+                Log.Logger = new LoggerConfiguration().WriteTo.MSSqlServer(connectionStr, new MSSqlServerSinkOptions
+                {
+                    SchemaName = "dbo",
+                    TableName = "SysLog",
+                    AutoCreateSqlTable = true
+                },
+                    sinkOptionsSection: sinkOptionsSection,
+                    appConfiguration: Configuration
+                ).CreateLogger();
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -100,6 +122,7 @@ namespace API
                 setup.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; //忽略循环引用
                 setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //默认日期格式化
             });
+
 
 
 

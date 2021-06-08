@@ -1,15 +1,14 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Common.Secure;
-using IBLL;
-using IBLL.System;
+﻿using IBLL.System;
+using IDAL;
 using Models.System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BLL.System
 {
     public class UserInfoBll : BaseBll<UserInfo>, IUserInfoBll
     {
-        public UserInfoBll(IBaseBll<UserInfo> currentDal) : base(currentDal)
+        public UserInfoBll(IBaseDal<UserInfo> currentDal) : base(currentDal)
         {
         }
 

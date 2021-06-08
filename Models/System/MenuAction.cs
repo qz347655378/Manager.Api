@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Common.Enum;
+﻿using Common.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.System

@@ -37,6 +37,12 @@
             <param name="model"></param>
             <returns>返回token及token过期时间</returns>
         </member>
+        <member name="M:API.Controllers.LoginController.GetCaptcha">
+            <summary>
+            获取验证码
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:API.Core.AutofacRegister">
             <summary>
             通过反射的方式实现注入

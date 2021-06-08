@@ -2,12 +2,13 @@
 using API.ViewModel;
 using API.ViewModel.Login;
 using Common.Enum;
+using Common.Secure;
+using IBLL.System;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Common.Secure;
-using IBLL.System;
 
 namespace API.Controllers
 {
@@ -29,7 +30,6 @@ namespace API.Controllers
         public async Task<ResponseResult<LoginResponseModel>> LoginAsync([FromBody] LoginRequestModel model)
         {
             var result = new ResponseResult<LoginResponseModel>();
-
             try
             {
                 var userInfo = await _userInfoBll.LoginAsync(model.UserName, EncryptHelper.Hash256Encrypt(model.Password));
@@ -65,8 +65,11 @@ namespace API.Controllers
             return result;
         }
 
-
-
+        /// <summary>
+        /// 获取验证码
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetCaptcha")]
         public ResponseResult<string> GetCaptcha()
         {
             var result = new ResponseResult<string>
@@ -86,14 +89,16 @@ namespace API.Controllers
 
                 result.Code = ResponseStatusEnum.Ok;
                 result.Msg = "获取成功";
-                result.Data = code;
+                result.Data = code.ToLower();
+                Log.Information("获取验证码");
             }
             catch (Exception e)
             {
                 result.Code = ResponseStatusEnum.BadRequest;
                 result.Msg = e.Message;
+                Log.Error(e, e.Message);
             }
-           
+
 
 
             return result;

@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Common.Enum;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Common.Enum;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.System
 {
@@ -12,7 +12,7 @@ namespace Models.System
         /// <summary>
         /// 角色名称
         /// </summary>
-        [Required,MaxLength(50)]
+        [Required, MaxLength(50)]
         public string RoleName { get; set; }
 
         /// <summary>

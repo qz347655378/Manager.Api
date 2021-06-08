@@ -1,12 +1,12 @@
-﻿using IBLL;
-using IBLL.System;
+﻿using IBLL.System;
+using IDAL;
 using Models.System;
 
 namespace BLL.System
 {
     public class MenuActionBll : BaseBll<MenuAction>, IMenuActionBll
     {
-        public MenuActionBll(IBaseBll<MenuAction> currentDal) : base(currentDal)
+        public MenuActionBll(IBaseDal<MenuAction> currentDal) : base(currentDal)
         {
         }
     }
