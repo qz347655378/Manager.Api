@@ -2,7 +2,6 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Serilog;
 
 namespace API
 {
@@ -21,7 +20,7 @@ namespace API
                     builder.AddFilter("System", LogLevel.Warning);
                     builder.AddFilter("Microsoft", LogLevel.Warning);
                     builder.ClearProviders();//清除掉默认的日志组件
-                    builder.AddSerilog();//注册Serilog
+                    builder.AddLog4Net();
                 })
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>

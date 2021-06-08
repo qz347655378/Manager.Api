@@ -10,26 +10,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="P:API.Controllers.UserInfo.UserName">
-            <summary>
-            用户名
-            </summary>
-        </member>
-        <member name="P:API.Controllers.UserInfo.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:API.Controllers.UserInfo.Mobile">
-            <summary>
-            联系号码
-            </summary>
-        </member>
-        <member name="P:API.Controllers.UserInfo.Nickname">
-            <summary>
-            昵称
-            </summary>
-        </member>
         <member name="M:API.Controllers.LoginController.LoginAsync(API.ViewModel.Login.LoginRequestModel)">
             <summary>
             用户登录
@@ -86,6 +66,18 @@
             <param name="key">键名</param>
             <returns></returns>
         </member>
+        <member name="T:API.Core.HttpContextExtension">
+            <summary>
+            HttpContext拓展类
+            </summary>
+        </member>
+        <member name="M:API.Core.HttpContextExtension.GetClientIp(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            获取客户端请求IP
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Core.JwtHelper.BuildJwtToken(System.Collections.Generic.IEnumerable{System.Security.Claims.Claim})">
             <summary>
             创建JWTToken
@@ -99,6 +91,16 @@
             </summary>
             <param name="dtime">The dtime.</param>
             <returns></returns>
+        </member>
+        <member name="P:API.ViewModel.Login.CaptchaViewModel.Captcha">
+            <summary>
+            验证码
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.Login.CaptchaViewModel.CaptchaKey">
+            <summary>
+            存储验证码的key
+            </summary>
         </member>
         <member name="T:API.ViewModel.Login.LoginRequestModel">
             <summary>
@@ -118,6 +120,11 @@
         <member name="P:API.ViewModel.Login.LoginRequestModel.Captcha">
             <summary>
             验证码
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.Login.LoginRequestModel.CaptchaKey">
+            <summary>
+            存储验证码的key
             </summary>
         </member>
         <member name="P:API.ViewModel.Login.LoginResponseModel.Token">

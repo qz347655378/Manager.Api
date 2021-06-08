@@ -1,3 +1,4 @@
+using API.Core;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,6 +20,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.IO;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace API
 {
@@ -35,7 +37,7 @@ namespace API
         public void ConfigureContainer(ContainerBuilder builder)
         {
             // 直接用Autofac注册我们自定义的 
-            builder.RegisterModule(new Core.AutofacRegister());
+            builder.RegisterModule(new AutofacRegister());
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -49,22 +51,20 @@ namespace API
             services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("Models")));
 
             //配置Serilog.AspNetCore 新的日志组件
-            services.AddLogging(builder =>
-            {
-                var sinkOptionsSection = Configuration.GetSection("Serilog:SinkOptions");
-                //  var columnOptionsSection = Configuration.GetSection("Serilog:ColumnOptions");
-                builder.ClearProviders();
-                //配置日志参数
-                Log.Logger = new LoggerConfiguration().WriteTo.MSSqlServer(connectionStr, new MSSqlServerSinkOptions
-                {
-                    SchemaName = "dbo",
-                    TableName = "SysLog",
-                    AutoCreateSqlTable = true
-                },
-                    sinkOptionsSection: sinkOptionsSection,
-                    appConfiguration: Configuration
-                ).CreateLogger();
-            });
+            //services.AddLogging(builder =>
+            //{
+            //    var sinkOptionsSection = Configuration.GetSection("Serilog:SinkOptions");
+            //    var columnOptionsSection = Configuration.GetSection("Serilog:ColumnOptions");
+            //    builder.ClearProviders();
+            //    builder.AddSerilog(new LoggerConfiguration().Enrich.With(new HttpContextEnricher()).WriteTo.MSSqlServer(connectionStr, new MSSqlServerSinkOptions
+            //    {
+            //        SchemaName = "dbo",
+            //        TableName = "SysLog",
+            //        AutoCreateSqlTable = true
+            //    }, sinkOptionsSection, Configuration, columnOptionsSection: columnOptionsSection).CreateLogger());
+               
+              
+            //});
 
             services.AddSwaggerGen(c =>
             {
@@ -92,8 +92,6 @@ namespace API
                 var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);
                 var xmlPath = Path.Combine(basePath ?? string.Empty, "API.xml");
                 c.IncludeXmlComments(xmlPath);
-
-
             });
             //配置认证服务
             //引用Microsoft.AspNetCore.Authentication.JwtBearer
@@ -123,7 +121,15 @@ namespace API
                 setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //默认日期格式化
             });
 
+            //配置memchche
+            services.AddMemoryCache(options =>
+            {
+                //设置缓存过期时间为2分钟
+                options.ExpirationScanFrequency = TimeSpan.FromMinutes(2);
+            });
 
+            //设置httpcontext,让其他类中也能使用httpcontext
+            services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
 
 
         }
@@ -139,6 +145,8 @@ namespace API
             }
 
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+            //注入自定义的log中间件
+           // app.UseMiddleware<HttpContextLogMiddleware>();
             app.UseHttpsRedirection();
 
             app.UseRouting();

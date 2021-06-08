@@ -5,10 +5,13 @@ using Common.Enum;
 using Common.Secure;
 using IBLL.System;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
+using Microsoft.Extensions.Caching.Memory;
+using Models.System;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using ILogger = log4net.Core.ILogger;
 
 namespace API.Controllers
 {
@@ -17,9 +20,13 @@ namespace API.Controllers
     public class LoginController : BaseController
     {
         private readonly IUserInfoBll _userInfoBll;
-        public LoginController(IUserInfoBll userInfoBll)
+        private readonly IMemoryCache _memoryCache;
+        private readonly ILogger<LoginController> _logger;
+        public LoginController(IUserInfoBll userInfoBll, IMemoryCache memoryCache, ILogger<LoginController> logger)
         {
             _userInfoBll = userInfoBll;
+            _memoryCache = memoryCache;
+            _logger = logger;
         }
         /// <summary>
         /// 用户登录
@@ -30,17 +37,36 @@ namespace API.Controllers
         public async Task<ResponseResult<LoginResponseModel>> LoginAsync([FromBody] LoginRequestModel model)
         {
             var result = new ResponseResult<LoginResponseModel>();
+            var ip = HttpContext.GetClientIp();
             try
             {
+                var capchat = _memoryCache.Get<string>(model.CaptchaKey);
+                //校验验证码
+                if (string.IsNullOrEmpty(capchat) || capchat != model.Captcha)
+                {
+                    result.Msg = "验证码错误或已经过期";
+                    _logger.LogWarning($"{model.UserName}登录，验证码错误或失效，登录失败", nameof(LoginAsync), ip);
+                    return result;
+                }
+                //移除验证码
+                _memoryCache.Remove(model.CaptchaKey);
                 var userInfo = await _userInfoBll.LoginAsync(model.UserName, EncryptHelper.Hash256Encrypt(model.Password));
                 if (userInfo != null)
                 {
+                    //账号禁用
+                    if (userInfo.AccountStatus == EnableEnum.Disable)
+                    {
+                        result.Msg = "账号已被禁用";
+                        Log.Warning($"{model.UserName}登录，账号已被禁用，登录失败", nameof(LoginAsync), ip);
+                        return result;
+                    }
                     var claims = new[]
                     {
                         new Claim(nameof(UserInfo.Id),userInfo.Id.ToString()),
                         new Claim(nameof(UserInfo.Mobile),userInfo.Mobile),
                         new Claim(nameof(UserInfo.Nickname),userInfo.Nickname),
-                        new Claim(nameof(UserInfo.UserName),userInfo.Account)
+                        new Claim(nameof(UserInfo.Account),userInfo.Account),
+                        new Claim(nameof(UserInfo.UserType),userInfo.UserType.ToString())
                     };
                     result.Msg = "登录成功";
                     result.Code = ResponseStatusEnum.Ok;
@@ -49,12 +75,16 @@ namespace API.Controllers
                         Expired = JwtHelper.GetTimeStamp(DateTime.Now.AddDays(30)),
                         Token = JwtHelper.BuildJwtToken(claims)
                     };
+                    userInfo.Ip = HttpContext.GetClientIp();
+                    userInfo.EditTime = DateTime.Now;
+                    await _userInfoBll.EditAsync(userInfo);
+                    Log.Information($"{model.UserName}登录成功", nameof(LoginAsync), ip);
                 }
                 else
                 {
+                    Log.Warning($"{model.UserName}登录失败，用户名或密码错误", nameof(LoginAsync), ip);
                     result.Msg = "用户名或密码错误";
                 }
-
             }
             catch (Exception e)
             {
@@ -70,9 +100,9 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetCaptcha")]
-        public ResponseResult<string> GetCaptcha()
+        public ResponseResult<CaptchaViewModel> GetCaptcha()
         {
-            var result = new ResponseResult<string>
+            var result = new ResponseResult<CaptchaViewModel>
             {
                 Msg = "获取失败"
             };
@@ -82,25 +112,29 @@ namespace API.Controllers
                 var rnd = new Random();
                 var code = string.Empty;
                 //生成验证码字符串 
-                for (var i = 0; i < 4; i++)
+                for (var i = 0; i < 5; i++)
                 {
                     code += character[rnd.Next(character.Length)];
                 }
 
                 result.Code = ResponseStatusEnum.Ok;
                 result.Msg = "获取成功";
-                result.Data = code.ToLower();
+                var key = Guid.NewGuid().ToString();
+                result.Data = new CaptchaViewModel
+                {
+                    CaptchaKey = key,
+                    Captcha = code.ToLower()
+                };
+                //将验证码放进缓存中
+                _memoryCache.Set(key, code.ToLower());
                 Log.Information("获取验证码");
             }
             catch (Exception e)
             {
                 result.Code = ResponseStatusEnum.BadRequest;
                 result.Msg = e.Message;
-                Log.Error(e, e.Message);
+                Log.Error(e, e.Message, nameof(GetCaptcha));
             }
-
-
-
             return result;
         }
 
