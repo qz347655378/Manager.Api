@@ -12,7 +12,7 @@ namespace Models.System
         /// <summary>
         /// 角色名称
         /// </summary>
-        [Required]
+        [Required,MaxLength(50)]
         public string RoleName { get; set; }
 
         /// <summary>

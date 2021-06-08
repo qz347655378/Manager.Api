@@ -13,12 +13,13 @@ namespace Models.System
         /// <summary>
         /// 账号
         /// </summary>
-        [Required]
+        [Required,MaxLength(50)]
         public string Account { get; set; }
 
         /// <summary>
         /// 昵称
         /// </summary>
+        [MaxLength(50)]
         public string Nickname { get; set; }
 
         /// <summary>
@@ -29,15 +30,17 @@ namespace Models.System
         /// <summary>
         /// 密码 默认密码123456
         /// </summary>
-        [Required]
+        [Required,MaxLength(256)]
         public string Password { get; set; } = EncryptHelper.Hash256Encrypt("123456");
         /// <summary>
         /// 联系电话
         /// </summary>
+        [MaxLength(20)]
         public string Mobile { get; set; }
         /// <summary>
         /// 最后一次登录时的IP
         /// </summary>
+        [MaxLength(50)]
         public string Ip { get; set; }
         /// <summary>
         /// 账号状态
