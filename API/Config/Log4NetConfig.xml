@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<log4net debug="false">
+<log4net debug="true">
 	<!--记录到数据库-->
 	<logger name="adoLog">
 		<level value="ALL"/>

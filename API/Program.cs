@@ -1,7 +1,10 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using System.IO;
+using Serilog.Sinks.MSSqlServer;
 
 namespace API
 {
@@ -9,23 +12,41 @@ namespace API
     {
         public static void Main(string[] args)
         {
+            var columnOptionsSection = Configuration.GetSection("Serilog:ColumnOptions");
+            var sinkOptionsSection = Configuration.GetSection("Serilog:SinkOptions");
+            var connectionStringName = Configuration.GetConnectionString("ManagerConnection");
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.MSSqlServer(
+                    connectionString: connectionStringName,
+                    sinkOptionsSection: sinkOptionsSection,
+                    sinkOptions: new MSSqlServerSinkOptions
+                    {
+                        AutoCreateSqlTable = true,
+                        TableName = "SysLog"
+                    },
+                    appConfiguration: Configuration,
+                    columnOptionsSection: columnOptionsSection)
+                .CreateLogger();
+            //  Log.Logger = new LoggerConfiguration().ReadFrom.CreateLogger();
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureLogging((context, builder) =>
-                {
-                    //  AddFilter() 过滤掉指定的相关日志
-                    builder.AddFilter("System", LogLevel.Warning);
-                    builder.AddFilter("Microsoft", LogLevel.Warning);
-                    builder.ClearProviders();//清除掉默认的日志组件
-                    builder.AddLog4Net();
-                })
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        private static IConfiguration Configuration
+        {
+            get
+            {
+                var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json")
+                    .AddJsonFile("appsettings.Development.json").Build();
+                return builder;
+            }
+        }
     }
 }

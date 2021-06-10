@@ -4,23 +4,21 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Serilog;
-using Serilog.Sinks.MSSqlServer;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.IO;
 using System.Text;
-using Microsoft.AspNetCore.Http;
+using Serilog;
 
 namespace API
 {
@@ -50,21 +48,7 @@ namespace API
             var connectionStr = Configuration.GetConnectionString("ManagerConnection");
             services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("Models")));
 
-            //配置Serilog.AspNetCore 新的日志组件
-            //services.AddLogging(builder =>
-            //{
-            //    var sinkOptionsSection = Configuration.GetSection("Serilog:SinkOptions");
-            //    var columnOptionsSection = Configuration.GetSection("Serilog:ColumnOptions");
-            //    builder.ClearProviders();
-            //    builder.AddSerilog(new LoggerConfiguration().Enrich.With(new HttpContextEnricher()).WriteTo.MSSqlServer(connectionStr, new MSSqlServerSinkOptions
-            //    {
-            //        SchemaName = "dbo",
-            //        TableName = "SysLog",
-            //        AutoCreateSqlTable = true
-            //    }, sinkOptionsSection, Configuration, columnOptionsSection: columnOptionsSection).CreateLogger());
-               
-              
-            //});
+         
 
             services.AddSwaggerGen(c =>
             {
@@ -144,11 +128,13 @@ namespace API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
 
+           
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             //注入自定义的log中间件
            // app.UseMiddleware<HttpContextLogMiddleware>();
             app.UseHttpsRedirection();
-
+            //  app.UseSerilogRequestLogging();
+            app.UseHttpContextLog();
             app.UseRouting();
 
             app.UseAuthentication();
