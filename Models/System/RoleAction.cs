@@ -1,10 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.System
 {
     [Table(nameof(RoleAction))]
-    public class RoleAction : Entity
+    public class RoleAction 
     {
+        /// <summary>
+        /// 主键
+        /// </summary>
+        [Key]
+        public int Id { get; set; }
         /// <summary>
         /// 角色ID
         /// </summary>

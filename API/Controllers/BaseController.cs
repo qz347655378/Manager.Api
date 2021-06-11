@@ -4,6 +4,7 @@ using Models.System;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using API.Core.Filters;
 
 namespace API.Controllers
 {
@@ -34,26 +35,10 @@ namespace API.Controllers
                 return null;
             }
         }
+
+        
     }
 
-    //public class UserInfo
-    //{
-    //    /// <summary>
-    //    /// 用户名
-    //    /// </summary>
-    //    public string UserName { get; set; }
-    //    /// <summary>
-    //    /// Id
-    //    /// </summary>
-    //    public string Id { get; set; }
-    //    /// <summary>
-    //    /// 联系号码
-    //    /// </summary>
-    //    public string Mobile { get; set; }
-    //    /// <summary>
-    //    /// 昵称
-    //    /// </summary>
-    //    public string Nickname { get; set; }
-    //}
+   
 
 }

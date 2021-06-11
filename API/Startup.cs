@@ -19,6 +19,7 @@ using System.IO;
 using System.Text;
 using API.Core.Autofac;
 using API.Core.Exception;
+using API.Core.Filters;
 using API.Core.LogExtensions;
 
 namespace API
@@ -99,7 +100,10 @@ namespace API
                 };
             });
             //配置序列化 引用Microsoft.AspNetCore.Mvc.NewtonsoftJson
-            services.AddControllers().AddNewtonsoftJson(setup =>
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<ActionFilter>();
+            }).AddNewtonsoftJson(setup =>
             {
                 setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//驼峰命名返回
                 setup.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; //忽略循环引用
@@ -109,8 +113,8 @@ namespace API
             //配置memchche
             services.AddMemoryCache(options =>
             {
-                //设置缓存过期时间为2分钟
-                options.ExpirationScanFrequency = TimeSpan.FromMinutes(2);
+                //设置缓存过期时间为30分钟,就是如果没有获取的话，30分钟以后就直接过期了
+                options.ExpirationScanFrequency = TimeSpan.FromMinutes(30);
             });
 
             //设置httpcontext,让其他类中也能使用httpcontext
@@ -126,15 +130,8 @@ namespace API
             {
                 app.UseDeveloperExceptionPage();
             }
-            //app.Use(async (context, next) =>
-            //{
-            //    LogContext.PushProperty("ClientIp", context.GetClientIp());
-            //    LogContext.PushProperty("API", context.Request.Path);
-            //    LogContext.PushProperty("RequestMethod", context.Request.Method);
-            //    LogContext.PushProperty("ResponseStatus", context.Response.StatusCode);
-            //    await next.Invoke();
 
-            //});
+            //注入自定义的log中间件
             app.UseHttpContextLog();
             //使用自定义异常处理
             app.UseExceptionHandle();
@@ -144,19 +141,13 @@ namespace API
 
 
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
-            //注入自定义的log中间件
-            // app.UseMiddleware<HttpContextLogMiddleware>();
-            app.UseHttpsRedirection();
-            //  app.UseSerilogRequestLogging();
-            // app.UseHttpContextLog();
 
+
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthentication();
-
-
-
             app.UseAuthorization();
 
 

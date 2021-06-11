@@ -11,7 +11,9 @@ using Serilog;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using API.Core.Filters;
 using API.Core.LogExtensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -21,12 +23,13 @@ namespace API.Controllers
     {
         private readonly IUserInfoBll _userInfoBll;
         private readonly IMemoryCache _memoryCache;
-        // private readonly ILogger _logger;
-        public LoginController(IUserInfoBll userInfoBll, IMemoryCache memoryCache/*, ILogger logger*/)
+
+        private readonly IRoleActonBll _roleActonBll;
+        public LoginController(IUserInfoBll userInfoBll, IMemoryCache memoryCache, IRoleActonBll roleActonBll)
         {
             _userInfoBll = userInfoBll;
             _memoryCache = memoryCache;
-            // _logger = logger;
+            _roleActonBll = roleActonBll;
         }
         /// <summary>
         /// 用户登录
@@ -76,7 +79,12 @@ namespace API.Controllers
                     };
                     userInfo.Ip = HttpContext.GetClientIp();
                     userInfo.EditTime = DateTime.Now;
+                    //修改用户登录信息
                     await _userInfoBll.EditAsync(userInfo);
+                    //用户授权
+                    var roleActionList = await _roleActonBll.GetRoleAction(userInfo.RoleId, userInfo.UserType == UserType.Administrator);
+                    //将用户权限放进缓存中，缓存默认30分钟动态过期
+                    _memoryCache.Set(userInfo.Account, roleActionList);
                     Log.Information($"{model.UserName}登录成功");
                 }
                 else
@@ -116,8 +124,15 @@ namespace API.Controllers
                     CaptchaKey = key,
                     Captcha = code
                 };
-                //将验证码放进缓存中
-                _memoryCache.Set(key, code.ToLower());
+                //将验证码放进缓存中,2分钟之后过期
+                var absoluteExpiration = new DateTimeOffset(DateTime.Now.AddMinutes(2));
+                //#if DEBUG
+                //                //测试时设置为5秒过期
+                //                absoluteExpiration = new DateTimeOffset(DateTime.Now.AddSeconds(5));
+
+                //#endif
+                _memoryCache.Set(key, code.ToLower(), absoluteExpiration: absoluteExpiration);
+
                 Log.Information("获取验证码");
             }
             catch (Exception e)
@@ -133,7 +148,7 @@ namespace API.Controllers
         /// 测试异常
         /// </summary>
         /// <returns></returns>
-        [HttpGet("TestException")]
+        [HttpGet("TestException"), Authorize, ActionAttribute("TestException")]
         public ResponseResult<string> TestException()
         {
             throw new Exception("测试异常");

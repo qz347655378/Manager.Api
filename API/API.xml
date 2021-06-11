@@ -45,6 +45,18 @@
             异常处理中间件
             </summary>
         </member>
+        <member name="T:API.Core.Filters.ActionAttribute">
+            <summary>
+            指定验证属性
+            </summary>
+        </member>
+        <member name="M:API.Core.Filters.GetUserByJwtToken.GetUserInfo(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            获取用户信息
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="F:API.Core.JWT.ConfigHelper._configuration">
             <summary>
             The configuration
