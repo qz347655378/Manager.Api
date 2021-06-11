@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace API.Core
+namespace API.Core.JWT
 {
     public static class JwtHelper
     {

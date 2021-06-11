@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Common.Enum
+﻿namespace Common.Enum
 {
     public enum LogType
     {

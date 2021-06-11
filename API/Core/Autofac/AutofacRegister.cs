@@ -2,7 +2,7 @@
 using System.Reflection;
 using Module = Autofac.Module;
 
-namespace API.Core
+namespace API.Core.Autofac
 {
     /// <summary>
     /// 通过反射的方式实现注入

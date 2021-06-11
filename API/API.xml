@@ -23,73 +23,90 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:API.Core.AutofacRegister">
+        <member name="M:API.Controllers.LoginController.TestException">
+            <summary>
+            测试异常
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.LoginController.CreateCaptcha">
+            <summary>
+            生成验证码
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:API.Core.Autofac.AutofacRegister">
             <summary>
             通过反射的方式实现注入
             </summary>
         </member>
-        <member name="F:API.Core.ConfigHelper._configuration">
+        <member name="T:API.Core.Exception.ExceptionMiddleware">
+            <summary>
+            异常处理中间件
+            </summary>
+        </member>
+        <member name="F:API.Core.JWT.ConfigHelper._configuration">
             <summary>
             The configuration
             </summary>
         </member>
-        <member name="M:API.Core.ConfigHelper.#ctor">
+        <member name="M:API.Core.JWT.ConfigHelper.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:API.Core.ConfigHelper"/> class.
+            Initializes a new instance of the <see cref="T:API.Core.JWT.ConfigHelper"/> class.
             </summary>
         </member>
-        <member name="M:API.Core.ConfigHelper.GetConfig(System.String)">
+        <member name="M:API.Core.JWT.ConfigHelper.GetConfig(System.String)">
             <summary>
             Gets the configuration.
             </summary>
             <param name="key">The key.</param>
             <returns></returns>
         </member>
-        <member name="M:API.Core.ConfigHelper.GetConfigToString(System.String)">
+        <member name="M:API.Core.JWT.ConfigHelper.GetConfigToString(System.String)">
              <summary>
             获取字符串配置
              </summary>
              <param name="key">The key.</param>
              <returns></returns>
         </member>
-        <member name="M:API.Core.ConfigHelper.GetConfigToInt(System.String)">
+        <member name="M:API.Core.JWT.ConfigHelper.GetConfigToInt(System.String)">
             <summary>
             查询配置，返回整数
             </summary>
             <param name="key">键名</param>
             <returns></returns>
         </member>
-        <member name="M:API.Core.ConfigHelper.GetConfigToBool(System.String)">
+        <member name="M:API.Core.JWT.ConfigHelper.GetConfigToBool(System.String)">
             <summary>
             查询配置，返回整数
             </summary>
             <param name="key">键名</param>
             <returns></returns>
         </member>
-        <member name="T:API.Core.HttpContextExtension">
-            <summary>
-            HttpContext拓展类
-            </summary>
-        </member>
-        <member name="M:API.Core.HttpContextExtension.GetClientIp(Microsoft.AspNetCore.Http.HttpContext)">
-            <summary>
-            获取客户端请求IP
-            </summary>
-            <param name="context"></param>
-            <returns></returns>
-        </member>
-        <member name="M:API.Core.JwtHelper.BuildJwtToken(System.Collections.Generic.IEnumerable{System.Security.Claims.Claim})">
+        <member name="M:API.Core.JWT.JwtHelper.BuildJwtToken(System.Collections.Generic.IEnumerable{System.Security.Claims.Claim})">
             <summary>
             创建JWTToken
             </summary>
             <param name="claims"></param>
             <returns></returns>
         </member>
-        <member name="M:API.Core.JwtHelper.GetTimeStamp(System.DateTime)">
+        <member name="M:API.Core.JWT.JwtHelper.GetTimeStamp(System.DateTime)">
             <summary>
             获取时间戳  13位
             </summary>
             <param name="dtime">The dtime.</param>
+            <returns></returns>
+        </member>
+        <member name="T:API.Core.LogExtensions.HttpContextExtensions">
+            <summary>
+            HttpContext拓展类
+            </summary>
+        </member>
+        <member name="M:API.Core.LogExtensions.HttpContextExtensions.GetClientIp(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            获取客户端请求IP
+            </summary>
+            <param name="context"></param>
             <returns></returns>
         </member>
         <member name="P:API.ViewModel.Login.CaptchaViewModel.Captcha">

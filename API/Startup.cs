@@ -1,4 +1,3 @@
-using API.Core;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,9 +17,9 @@ using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.IO;
 using System.Text;
-using Microsoft.Extensions.Primitives;
-using Serilog;
-using Serilog.Context;
+using API.Core.Autofac;
+using API.Core.Exception;
+using API.Core.LogExtensions;
 
 namespace API
 {
@@ -50,7 +49,7 @@ namespace API
             var connectionStr = Configuration.GetConnectionString("ManagerConnection");
             services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("Models")));
 
-         
+
 
             services.AddSwaggerGen(c =>
             {
@@ -126,31 +125,37 @@ namespace API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
+            //app.Use(async (context, next) =>
+            //{
+            //    LogContext.PushProperty("ClientIp", context.GetClientIp());
+            //    LogContext.PushProperty("API", context.Request.Path);
+            //    LogContext.PushProperty("RequestMethod", context.Request.Method);
+            //    LogContext.PushProperty("ResponseStatus", context.Response.StatusCode);
+            //    await next.Invoke();
 
-           
+            //});
+            app.UseHttpContextLog();
+            //使用自定义异常处理
+            app.UseExceptionHandle();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+
+
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             //注入自定义的log中间件
-           // app.UseMiddleware<HttpContextLogMiddleware>();
+            // app.UseMiddleware<HttpContextLogMiddleware>();
             app.UseHttpsRedirection();
             //  app.UseSerilogRequestLogging();
-           // app.UseHttpContextLog();
+            // app.UseHttpContextLog();
 
 
             app.UseRouting();
 
             app.UseAuthentication();
 
-            app.Use(async (context, next) =>
-            {
-                LogContext.PushProperty("ClientIp", context.GetClientIp());
-                LogContext.PushProperty("API", context.Request.Path);
-                LogContext.PushProperty("RequestMethod", context.Request.Method);
-                LogContext.PushProperty("ResponseStatus", context.Response.StatusCode);
-                await next.Invoke();
-            });
+
 
             app.UseAuthorization();
 

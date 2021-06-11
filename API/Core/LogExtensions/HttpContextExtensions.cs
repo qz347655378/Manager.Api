@@ -1,12 +1,12 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using System.Linq;
 
-namespace API.Core
+namespace API.Core.LogExtensions
 {
     /// <summary>
     /// HttpContext拓展类
     /// </summary>
-    public static class HttpContextExtension
+    public static class HttpContextExtensions
     {
         /// <summary>
         /// 获取客户端请求IP

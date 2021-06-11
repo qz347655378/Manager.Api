@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 
-namespace API.Core
+namespace API.Core.JWT
 {
     public class ConfigHelper
     {

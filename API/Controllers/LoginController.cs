@@ -1,4 +1,4 @@
-﻿using API.Core;
+﻿using API.Core.JWT;
 using API.ViewModel;
 using API.ViewModel.Login;
 using Common.Enum;
@@ -7,10 +7,11 @@ using IBLL.System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Models.System;
+using Serilog;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Serilog;
+using API.Core.LogExtensions;
 
 namespace API.Controllers
 {
@@ -40,7 +41,7 @@ namespace API.Controllers
             {
                 var capchat = _memoryCache.Get<string>(model.CaptchaKey);
                 //校验验证码
-                if (string.IsNullOrEmpty(capchat) || capchat != model.Captcha)
+                if (string.IsNullOrEmpty(capchat) || capchat != model.Captcha.ToLower())
                 {
                     result.Msg = "验证码错误或已经过期";
                     Log.Warning($"{model.UserName}登录，验证码错误或失效，登录失败");
@@ -106,30 +107,18 @@ namespace API.Controllers
             };
             try
             {
-                char[] character = { '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'd', 'e', 'f', 'h', 'k', 'm', 'n', 'r', 'x', 'y', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'W', 'X', 'Y' };
-                var rnd = new Random();
-                var code = string.Empty;
-                //生成验证码字符串 
-                for (var i = 0; i < 5; i++)
-                {
-                    code += character[rnd.Next(character.Length)];
-                }
-
+                var code = CreateCaptcha();
                 result.Code = ResponseStatusEnum.Ok;
                 result.Msg = "获取成功";
                 var key = Guid.NewGuid().ToString();
                 result.Data = new CaptchaViewModel
                 {
                     CaptchaKey = key,
-                    Captcha = code.ToLower()
+                    Captcha = code
                 };
                 //将验证码放进缓存中
                 _memoryCache.Set(key, code.ToLower());
                 Log.Information("获取验证码");
-                //Log.Information("{Message}{ClientIp}{API}{ResponseStatus}{RequestMethod}", "获取验证码2", "127.0.0.1", "GetCaptcha", "200", "GET");
-                //Log.Logger.Information("{Message}{ClientIp}{API}{ResponseStatus}{RequestMethod}", "获取验证码3", "127.0.0.1", "GetCaptcha", "200", "GET");
-                //  LogHelper.Write("获取验证码", LogType.Info, null, HttpContext);
-                //Log.Logger.ForContext("API", "GetCaptcha").Information("获取验证码4");
             }
             catch (Exception e)
             {
@@ -140,5 +129,32 @@ namespace API.Controllers
             return result;
         }
 
+        /// <summary>
+        /// 测试异常
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("TestException")]
+        public ResponseResult<string> TestException()
+        {
+            throw new Exception("测试异常");
+        }
+
+        /// <summary>
+        /// 生成验证码
+        /// </summary>
+        /// <returns></returns>
+        private string CreateCaptcha()
+        {
+            char[] character = { '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'd', 'e', 'f', 'h', 'k', 'm', 'n', 'r', 'x', 'y', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'W', 'X', 'Y' };
+            var rnd = new Random();
+            var code = string.Empty;
+            //生成验证码字符串 
+            for (var i = 0; i < 5; i++)
+            {
+                code += character[rnd.Next(character.Length)];
+            }
+
+            return code;
+        }
     }
 }

@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using System.IO;
 using Serilog.Sinks.MSSqlServer;
+using System.IO;
 
 namespace API
 {
@@ -37,6 +37,7 @@ namespace API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    //此处不叫UseSerilog,加了会把系统级别的日志写入
                 });
 
         private static IConfiguration Configuration
