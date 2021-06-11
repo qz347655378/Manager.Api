@@ -18,7 +18,9 @@ using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.IO;
 using System.Text;
+using Microsoft.Extensions.Primitives;
 using Serilog;
+using Serilog.Context;
 
 namespace API
 {
@@ -134,10 +136,22 @@ namespace API
            // app.UseMiddleware<HttpContextLogMiddleware>();
             app.UseHttpsRedirection();
             //  app.UseSerilogRequestLogging();
-            app.UseHttpContextLog();
+           // app.UseHttpContextLog();
+
+
             app.UseRouting();
 
             app.UseAuthentication();
+
+            app.Use(async (context, next) =>
+            {
+                LogContext.PushProperty("ClientIp", context.GetClientIp());
+                LogContext.PushProperty("API", context.Request.Path);
+                LogContext.PushProperty("RequestMethod", context.Request.Method);
+                LogContext.PushProperty("ResponseStatus", context.Response.StatusCode);
+                await next.Invoke();
+            });
+
             app.UseAuthorization();
 
 

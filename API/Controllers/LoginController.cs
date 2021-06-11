@@ -43,7 +43,7 @@ namespace API.Controllers
                 if (string.IsNullOrEmpty(capchat) || capchat != model.Captcha)
                 {
                     result.Msg = "验证码错误或已经过期";
-                    // _logger.LogWarning($"{model.UserName}登录，验证码错误或失效，登录失败", nameof(LoginAsync), ip);
+                    Log.Warning($"{model.UserName}登录，验证码错误或失效，登录失败");
                     return result;
                 }
                 //移除验证码
@@ -76,11 +76,11 @@ namespace API.Controllers
                     userInfo.Ip = HttpContext.GetClientIp();
                     userInfo.EditTime = DateTime.Now;
                     await _userInfoBll.EditAsync(userInfo);
-                    //  Log.Information($"{model.UserName}登录成功", nameof(LoginAsync), ip);
+                    Log.Information($"{model.UserName}登录成功");
                 }
                 else
                 {
-                    //  Log.Warning($"{model.UserName}登录失败，用户名或密码错误", nameof(LoginAsync), ip);
+                    Log.Warning($"{model.UserName}登录失败，用户名或密码错误");
                     result.Msg = "用户名或密码错误";
                 }
             }
@@ -126,13 +126,16 @@ namespace API.Controllers
                 //将验证码放进缓存中
                 _memoryCache.Set(key, code.ToLower());
                 Log.Information("获取验证码");
+                //Log.Information("{Message}{ClientIp}{API}{ResponseStatus}{RequestMethod}", "获取验证码2", "127.0.0.1", "GetCaptcha", "200", "GET");
+                //Log.Logger.Information("{Message}{ClientIp}{API}{ResponseStatus}{RequestMethod}", "获取验证码3", "127.0.0.1", "GetCaptcha", "200", "GET");
                 //  LogHelper.Write("获取验证码", LogType.Info, null, HttpContext);
+                //Log.Logger.ForContext("API", "GetCaptcha").Information("获取验证码4");
             }
             catch (Exception e)
             {
                 result.Code = ResponseStatusEnum.BadRequest;
                 result.Msg = e.Message;
-                //  Log.Error(e, e.Message, nameof(GetCaptcha));
+                Log.Error(e, e.Message);
             }
             return result;
         }

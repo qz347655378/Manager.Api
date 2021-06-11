@@ -15,7 +15,7 @@ namespace API
             var columnOptionsSection = Configuration.GetSection("Serilog:ColumnOptions");
             var sinkOptionsSection = Configuration.GetSection("Serilog:SinkOptions");
             var connectionStringName = Configuration.GetConnectionString("ManagerConnection");
-            Log.Logger = new LoggerConfiguration()
+            Log.Logger = new LoggerConfiguration().Enrich.FromLogContext()
                 .WriteTo.MSSqlServer(
                     connectionString: connectionStringName,
                     sinkOptionsSection: sinkOptionsSection,
