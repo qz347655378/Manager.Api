@@ -50,6 +50,14 @@
             指定验证属性
             </summary>
         </member>
+        <member name="M:API.Core.Filters.ActionFilter.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
+            <summary>
+            权限校验
+            </summary>
+            <param name="context"></param>
+            <param name="next"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Core.Filters.GetUserByJwtToken.GetUserInfo(Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
             获取用户信息

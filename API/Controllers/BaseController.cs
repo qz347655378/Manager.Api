@@ -4,7 +4,7 @@ using Models.System;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using API.Core.Filters;
+using API.Core.JWT;
 
 namespace API.Controllers
 {
@@ -19,16 +19,7 @@ namespace API.Controllers
         {
             try
             {
-                var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer", "").Trim();
-                var claims = new JwtSecurityToken(token).Claims;
-                var enumerable = claims.ToList();
-                return new UserInfo
-                {
-                    Id = Convert.ToInt32(enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Id))?.Value ?? ""),
-                    Mobile = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Mobile))?.Value ?? "",
-                    Nickname = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Nickname))?.Value ?? "",
-                    Account = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Account))?.Value ?? ""
-                };
+                return JwtHelper.GetUserInfo(HttpContext);
             }
             catch (Exception)
             {
@@ -36,9 +27,9 @@ namespace API.Controllers
             }
         }
 
-        
+
     }
 
-   
+
 
 }

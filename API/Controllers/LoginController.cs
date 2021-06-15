@@ -81,10 +81,7 @@ namespace API.Controllers
                     userInfo.EditTime = DateTime.Now;
                     //修改用户登录信息
                     await _userInfoBll.EditAsync(userInfo);
-                    //用户授权
-                    var roleActionList = await _roleActonBll.GetRoleAction(userInfo.RoleId, userInfo.UserType == UserType.Administrator);
-                    //将用户权限放进缓存中，缓存默认30分钟动态过期
-                    _memoryCache.Set(userInfo.Account, roleActionList);
+                  
                     Log.Information($"{model.UserName}登录成功");
                 }
                 else

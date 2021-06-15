@@ -3,8 +3,10 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace API.Core.JWT
 {
@@ -45,6 +47,31 @@ namespace API.Core.JWT
         {
             var ts = dtime - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(ts.TotalSeconds * 1000);
+        }
+
+
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static Models.System.UserInfo GetUserInfo(HttpContext context)
+        {
+            var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer", "").Trim();
+            if (string.IsNullOrEmpty(token))
+            {
+                context.Response.StatusCode = 401;
+                throw new System.Exception("请携带token请求！");
+            }
+            var claims = new JwtSecurityToken(token).Claims;
+            var enumerable = claims.ToList();
+            return new Models.System.UserInfo
+            {
+                Id = Convert.ToInt32(enumerable.FirstOrDefault(c => c.Type == nameof(Models.System.UserInfo.Id))?.Value ?? ""),
+                Mobile = enumerable.FirstOrDefault(c => c.Type == nameof(Models.System.UserInfo.Mobile))?.Value ?? "",
+                Nickname = enumerable.FirstOrDefault(c => c.Type == nameof(Models.System.UserInfo.Nickname))?.Value ?? "",
+                Account = enumerable.FirstOrDefault(c => c.Type == nameof(Models.System.UserInfo.Account))?.Value ?? ""
+            };
         }
     }
 }
