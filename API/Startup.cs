@@ -21,6 +21,8 @@ using API.Core.Autofac;
 using API.Core.Exception;
 using API.Core.Filters;
 using API.Core.LogExtensions;
+using Quartz;
+using Quartz.Impl;
 
 namespace API
 {
@@ -119,6 +121,9 @@ namespace API
 
             //设置httpcontext,让其他类中也能使用httpcontext
             services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
+
+            //注入Quartz定时任务组件
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
 
         }
