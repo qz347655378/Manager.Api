@@ -62,7 +62,7 @@
         </member>
         <member name="M:API.Controllers.System.MenuController.GetCurrentUserMenuList">
             <summary>
-            获取当前用户的菜单
+            获取当前用户的菜单（无上下级关系）
             </summary>
             <returns></returns>
         </member>

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Models.System;
 
 namespace API.Core.JWT
 {
@@ -55,17 +56,16 @@ namespace API.Core.JWT
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static Models.System.UserInfo GetUserInfo(HttpContext context)
+        public static UserInfo GetUserInfo(HttpContext context)
         {
             var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer", "").Trim();
             if (string.IsNullOrEmpty(token))
             {
-                context.Response.StatusCode = 401;
-                throw new System.Exception("请携带token请求！");
+                return new UserInfo();
             }
             var claims = new JwtSecurityToken(token).Claims;
             var enumerable = claims.ToList();
-            return new Models.System.UserInfo
+            return new UserInfo
             {
                 Id = Convert.ToInt32(enumerable.FirstOrDefault(c => c.Type == nameof(Models.System.UserInfo.Id))?.Value ?? ""),
                 Mobile = enumerable.FirstOrDefault(c => c.Type == nameof(Models.System.UserInfo.Mobile))?.Value ?? "",

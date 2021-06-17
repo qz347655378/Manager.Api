@@ -57,7 +57,11 @@ namespace API.Core.Filters
                 context.HttpContext.Response.StatusCode = 403;
                 context.HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result));
                 Log.Warning($"【{userInfo.Account}】试图访问【{action.Code}】被拒绝，没有权限！");
-
+            }
+            else
+            {
+                //这样每次访问都会被记录在日志里面
+                Log.Information($"【{userInfo.Account}】访问【{action.Code}】成功");
             }
             return base.OnActionExecutionAsync(context, next);
         }

@@ -11,8 +11,8 @@ using Common.Enum;
 using IBLL.System;
 using Microsoft.AspNetCore.Authorization;
 using Models.System;
+using Serilog;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace API.Controllers.System
 {
@@ -48,9 +48,11 @@ namespace API.Controllers.System
 
             var list = await _menuActionBll.GetListAsync(c =>
                  c.IsDelete == DeleteStatus.NoDelete && c.ActionStatus == EnableEnum.Enable);
-            result.Data = list;
+            result.Data = list.OrderBy(c => c.Sort).ToList();
             return result;
         }
+
+        
 
         /// <summary>
         /// 根据角色ID获取角色的拥有的菜单权限
@@ -66,7 +68,7 @@ namespace API.Controllers.System
                 Msg = "请求成功"
             };
             var list = await _roleActonBll.GetRoleAction(roleId, false);
-            result.Data = list;
+            result.Data = list.OrderBy(c => c.Sort).ToList();
             return result;
         }
 
@@ -84,7 +86,8 @@ namespace API.Controllers.System
             };
             var userInfo = JwtHelper.GetUserInfo(HttpContext);
             var list = await _roleActonBll.GetRoleAction(userInfo.RoleId, userInfo.UserType == UserType.Administrator);
-            result.Data = list;
+            result.Data = list.OrderBy(c => c.Sort).ToList();
+
             return result;
         }
 

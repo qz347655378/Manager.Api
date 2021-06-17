@@ -6,6 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.System
 {
+    /// <summary>
+    /// 用户信息
+    /// </summary>
     [Table("UserInfo")]
     [Index("Account", IsUnique = true)]
     public class UserInfo : Entity
@@ -52,6 +55,9 @@ namespace Models.System
         /// </summary>
         public int RoleId { get; set; }
 
+        /// <summary>
+        /// 角色信息
+        /// </summary>
         [ForeignKey("RoleId")]
         public virtual RoleInfo RoleInfo { get; set; }
 

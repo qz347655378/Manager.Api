@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Serilog.Context;
 using System.Threading.Tasks;
+using API.Core.JWT;
 
 namespace API.Core.LogExtensions
 {
@@ -25,6 +26,7 @@ namespace API.Core.LogExtensions
             LogContext.PushProperty("API", context.Request.Path);
             LogContext.PushProperty("RequestMethod", context.Request.Method);
             LogContext.PushProperty("ResponseStatus", context.Response.StatusCode);
+            LogContext.PushProperty("Account", JwtHelper.GetUserInfo(context).Account);
         }
     }
 
