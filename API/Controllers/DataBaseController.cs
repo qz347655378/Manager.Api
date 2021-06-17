@@ -1,12 +1,11 @@
-﻿using System;
+﻿using API.Core.Filters;
 using API.Core.Jobs;
 using API.ViewModel;
+using Common.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quartz;
 using System.Threading.Tasks;
-using API.Core.Filters;
-using Common.Enum;
-using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -24,6 +23,7 @@ namespace API.Controllers
         /// <summary>
         /// 备份数据库
         /// </summary>
+        /// <param name="cron">cron数据</param>
         /// <returns></returns>
         [HttpGet, Action("BackupData")]
         public async Task<ResponseResult<string>> BackupData(string cron)

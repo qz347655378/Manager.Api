@@ -24,12 +24,10 @@ namespace API.Controllers
         private readonly IUserInfoBll _userInfoBll;
         private readonly IMemoryCache _memoryCache;
 
-        private readonly IRoleActonBll _roleActonBll;
-        public LoginController(IUserInfoBll userInfoBll, IMemoryCache memoryCache, IRoleActonBll roleActonBll)
+        public LoginController(IUserInfoBll userInfoBll, IMemoryCache memoryCache)
         {
             _userInfoBll = userInfoBll;
             _memoryCache = memoryCache;
-            _roleActonBll = roleActonBll;
         }
         /// <summary>
         /// 用户登录
@@ -141,6 +139,8 @@ namespace API.Controllers
             return result;
         }
 
+
+#if DEBUG
         /// <summary>
         /// 测试异常
         /// </summary>
@@ -150,6 +150,8 @@ namespace API.Controllers
         {
             throw new Exception("测试异常");
         }
+#endif
+
 
         /// <summary>
         /// 生成验证码

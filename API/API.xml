@@ -10,6 +10,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.DataBaseController.BackupData(System.String)">
+            <summary>
+            备份数据库
+            </summary>
+            <param name="cron">cron数据</param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.LoginController.LoginAsync(API.ViewModel.Login.LoginRequestModel)">
             <summary>
             用户登录
@@ -32,6 +39,50 @@
         <member name="M:API.Controllers.LoginController.CreateCaptcha">
             <summary>
             生成验证码
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:API.Controllers.System.MenuController">
+            <summary>
+            菜单管理
+            </summary>
+        </member>
+        <member name="M:API.Controllers.System.MenuController.GetAllMenuList">
+            <summary>
+            获取所有可用菜单信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.System.MenuController.GetMenuList(System.Int32)">
+            <summary>
+            根据角色ID获取角色的拥有的菜单权限
+            </summary>
+            <param name="roleId">角色ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.System.MenuController.GetCurrentUserMenuList">
+            <summary>
+            获取当前用户的菜单
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.System.MenuController.MenuAdd(Models.System.MenuAction)">
+            <summary>
+            添加菜单
+            </summary>
+            <param name="menuAction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.System.MenuController.MenuEdit(Models.System.MenuAction)">
+            <summary>
+            编辑菜单项
+            </summary>
+            <param name="menuAction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.System.MenuController.EditRoleMenu(API.ViewModel.Menu.RoleActionViewModel)">
+            <summary>
+            修改角色菜单
             </summary>
             <returns></returns>
         </member>
@@ -58,12 +109,10 @@
             <param name="next"></param>
             <returns></returns>
         </member>
-        <member name="M:API.Core.Filters.GetUserByJwtToken.GetUserInfo(Microsoft.AspNetCore.Http.HttpContext)">
+        <member name="T:API.Core.Jobs.DatabaseBackup">
             <summary>
-            获取用户信息
+            数据库备份
             </summary>
-            <param name="context"></param>
-            <returns></returns>
         </member>
         <member name="F:API.Core.JWT.ConfigHelper._configuration">
             <summary>
@@ -115,6 +164,13 @@
             获取时间戳  13位
             </summary>
             <param name="dtime">The dtime.</param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Core.JWT.JwtHelper.GetUserInfo(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            获取用户信息
+            </summary>
+            <param name="context"></param>
             <returns></returns>
         </member>
         <member name="T:API.Core.LogExtensions.HttpContextExtensions">
@@ -172,6 +228,16 @@
         <member name="P:API.ViewModel.Login.LoginResponseModel.Expired">
             <summary>
             过期时间
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.Menu.RoleActionViewModel.RoleId">
+            <summary>
+            角色ID
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.Menu.RoleActionViewModel.ActionIds">
+            <summary>
+            菜单ID集合
             </summary>
         </member>
         <member name="P:API.ViewModel.ResponseResult`1.Code">
