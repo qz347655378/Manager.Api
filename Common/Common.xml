@@ -79,6 +79,11 @@
             内部错误
             </summary>
         </member>
+        <member name="T:Common.Enum.UserType">
+            <summary>
+            用户类型
+            </summary>
+        </member>
         <member name="F:Common.Enum.UserType.Administrator">
             <summary>
             管理员

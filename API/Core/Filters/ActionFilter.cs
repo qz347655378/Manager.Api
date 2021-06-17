@@ -46,7 +46,7 @@ namespace API.Core.Filters
                 //将用户权限放进缓存中，缓存默认30分钟动态过期
                 _memoryCache.Set(userInfo.Account, actionList);
             }
-            if (actionList.Find(c => c.Code.Equals(action.Code)) == null)
+            if (actionList.Find(c => c.Code.Equals(action.Code)) == null && userInfo.UserType != UserType.Administrator)
             {
                 var result = new ResponseResult<string>
                 {

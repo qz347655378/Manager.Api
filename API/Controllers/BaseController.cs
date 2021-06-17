@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using API.Core.JWT;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.System;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using API.Core.JWT;
 
 namespace API.Controllers
 {

@@ -1,17 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Core.Filters;
+﻿using API.Core.Filters;
 using API.Core.JWT;
 using API.ViewModel;
 using API.ViewModel.Menu;
 using Common.Enum;
 using IBLL.System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Models.System;
-using Serilog;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace API.Controllers.System
@@ -52,7 +50,7 @@ namespace API.Controllers.System
             return result;
         }
 
-        
+
 
         /// <summary>
         /// 根据角色ID获取角色的拥有的菜单权限

@@ -1,9 +1,12 @@
-﻿using API.Core.JWT;
+﻿using API.Core.Filters;
+using API.Core.JWT;
+using API.Core.LogExtensions;
 using API.ViewModel;
 using API.ViewModel.Login;
 using Common.Enum;
 using Common.Secure;
 using IBLL.System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Models.System;
@@ -11,9 +14,6 @@ using Serilog;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using API.Core.Filters;
-using API.Core.LogExtensions;
-using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -79,7 +79,7 @@ namespace API.Controllers
                     userInfo.EditTime = DateTime.Now;
                     //修改用户登录信息
                     await _userInfoBll.EditAsync(userInfo);
-                  
+
                     Log.Information($"{model.UserName}登录成功");
                 }
                 else

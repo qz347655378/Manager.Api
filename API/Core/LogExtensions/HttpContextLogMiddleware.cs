@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using API.Core.JWT;
+using Microsoft.AspNetCore.Http;
 using Serilog.Context;
 using System.Threading.Tasks;
-using API.Core.JWT;
 
 namespace API.Core.LogExtensions
 {

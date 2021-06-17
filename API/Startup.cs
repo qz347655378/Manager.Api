@@ -1,3 +1,7 @@
+using API.Core.Autofac;
+using API.Core.Exception;
+using API.Core.Filters;
+using API.Core.LogExtensions;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,16 +17,12 @@ using Microsoft.OpenApi.Models;
 using Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Quartz;
+using Quartz.Impl;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.IO;
 using System.Text;
-using API.Core.Autofac;
-using API.Core.Exception;
-using API.Core.Filters;
-using API.Core.LogExtensions;
-using Quartz;
-using Quartz.Impl;
 
 namespace API
 {
@@ -45,6 +45,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
+            //  services.AddHostFiltering();
             //设置跨域
             services.AddCors(c => c.AddPolicy("any", builder => builder.WithOrigins("*").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
             //添加数据库支持
@@ -140,6 +141,8 @@ namespace API
             app.UseHttpContextLog();
             //使用自定义异常处理
             app.UseExceptionHandle();
+            //IP过滤
+            app.UseIpFilter();
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));

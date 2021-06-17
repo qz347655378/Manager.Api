@@ -145,6 +145,11 @@
             客户端请求方式
             </summary>
         </member>
+        <member name="T:Models.System.UserInfo">
+            <summary>
+            用户信息
+            </summary>
+        </member>
         <member name="P:Models.System.UserInfo.Account">
             <summary>
             账号
@@ -183,6 +188,11 @@
         <member name="P:Models.System.UserInfo.RoleId">
             <summary>
             角色ID
+            </summary>
+        </member>
+        <member name="P:Models.System.UserInfo.RoleInfo">
+            <summary>
+            角色信息
             </summary>
         </member>
     </members>

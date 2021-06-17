@@ -1,5 +1,8 @@
 ﻿namespace Common.Enum
 {
+    /// <summary>
+    /// 用户类型
+    /// </summary>
     public enum UserType
     {
         /// <summary>

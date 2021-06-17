@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Common.Enum;
+﻿using Common.Enum;
 using IBLL.System;
 using IDAL;
-using Microsoft.EntityFrameworkCore.Internal;
 using Models.System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BLL.System
 {

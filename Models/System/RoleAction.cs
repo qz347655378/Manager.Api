@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Models.System
 {
     [Table(nameof(RoleAction))]
-    public class RoleAction 
+    public class RoleAction
     {
         /// <summary>
         /// 主键

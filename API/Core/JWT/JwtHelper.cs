@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Common.Enum;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
+using Models.System;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Http;
-using Models.System;
 
 namespace API.Core.JWT
 {
@@ -65,12 +66,14 @@ namespace API.Core.JWT
             }
             var claims = new JwtSecurityToken(token).Claims;
             var enumerable = claims.ToList();
+            Enum.TryParse(enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.UserType))?.Value ?? "", out UserType ut);
             return new UserInfo
             {
-                Id = Convert.ToInt32(enumerable.FirstOrDefault(c => c.Type == nameof(Models.System.UserInfo.Id))?.Value ?? ""),
-                Mobile = enumerable.FirstOrDefault(c => c.Type == nameof(Models.System.UserInfo.Mobile))?.Value ?? "",
-                Nickname = enumerable.FirstOrDefault(c => c.Type == nameof(Models.System.UserInfo.Nickname))?.Value ?? "",
-                Account = enumerable.FirstOrDefault(c => c.Type == nameof(Models.System.UserInfo.Account))?.Value ?? ""
+                Id = Convert.ToInt32(enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Id))?.Value ?? ""),
+                Mobile = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Mobile))?.Value ?? "",
+                Nickname = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Nickname))?.Value ?? "",
+                Account = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Account))?.Value ?? "",
+                UserType = ut
             };
         }
     }

@@ -24,7 +24,7 @@
         /// <summary>
         /// 禁止请求，一般用于没有权限
         /// </summary>
-        Forbidden=403,
+        Forbidden = 403,
         /// <summary>
         /// 未找到请求资源
         /// </summary>

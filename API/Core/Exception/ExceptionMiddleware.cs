@@ -39,8 +39,8 @@ namespace API.Core.Exception
                 Code = ResponseStatusEnum.InternalServerError
             };
             context.Response.ContentType = "application/json";
-            Log.Error(exception,exception.Message);
-            
+            Log.Error(exception, exception.Message);
+
             return context.Response.WriteAsync(JsonConvert.SerializeObject(result));
         }
     }

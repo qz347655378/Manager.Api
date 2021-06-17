@@ -62,7 +62,7 @@
         </member>
         <member name="M:API.Controllers.System.MenuController.GetCurrentUserMenuList">
             <summary>
-            获取当前用户的菜单（无上下级关系）
+            获取当前用户的菜单
             </summary>
             <returns></returns>
         </member>
@@ -107,6 +107,24 @@
             </summary>
             <param name="context"></param>
             <param name="next"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Core.Filters.IpFilterExtensions.UseIpFilter(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            IP过滤
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="T:API.Core.Filters.IpFilterMiddleware">
+            <summary>
+            ip过滤
+            </summary>
+        </member>
+        <member name="M:API.Core.Filters.IpFilterMiddleware.IpFilter(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            ip过滤
+            </summary>
+            <param name="context"></param>
             <returns></returns>
         </member>
         <member name="T:API.Core.Jobs.DatabaseBackup">
