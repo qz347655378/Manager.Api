@@ -44,12 +44,9 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
-
-            //  services.AddHostFiltering();
             //设置跨域
             services.AddCors(c => c.AddPolicy("any", builder => builder.WithOrigins("*").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
             //添加数据库支持
-            // services.AddScoped<DbContext,DAL.ManagerDbContext>();
             var connectionStr = Configuration.GetConnectionString("ManagerConnection");
             services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("Models")));
 
@@ -108,9 +105,10 @@ namespace API
                 options.Filters.Add<ActionFilter>();
             }).AddNewtonsoftJson(setup =>
             {
-                setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//驼峰命名返回
+             //   setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//驼峰命名返回
                 setup.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; //忽略循环引用
                 setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //默认日期格式化
+                setup.SerializerSettings.ContractResolver = new NullToEmptyStringResolver();//替换null值为string.empty
             });
 
             //配置memchche

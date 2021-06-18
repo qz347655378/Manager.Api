@@ -36,10 +36,8 @@ namespace API.Core.Filters
         public async Task IpFilter(HttpContext context)
         {
 
-            //  var s = _configuration.GetSection("IpWhitelist").Get<List<string>>();
             //ip白名单
             var whitelist = _configuration.GetSection("IpWhitelist").Get<List<string>>();
-
 
             //ip黑名单
             var blacklist = _configuration.GetSection("IpBlacklist").Get<List<string>>();
