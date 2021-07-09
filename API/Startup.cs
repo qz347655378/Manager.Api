@@ -37,15 +37,19 @@ namespace API
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            // ÷±Ω””√Autofac◊¢≤·Œ“√«◊‘∂®“Âµƒ 
+            // ?????Autofac????????????? 
             builder.RegisterModule(new AutofacRegister());
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //…Ë÷√øÁ”Ú
-            services.AddCors(c => c.AddPolicy("any", builder => builder.WithOrigins("*").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
-            //ÃÌº” ˝æ›ø‚÷ß≥÷
+            //???????
+            services.AddCors(c => c.AddPolicy("any",
+                builder => builder.SetIsOriginAllowed(_ => true).AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
+            //services.AddCors(c=>c.AddPolicy("any", builder => builder.WithMethods("GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS")
+            //    //.AllowCredentials()//???????cookie
+            //    .AllowAnyOrigin()));
+            //???????????
             var connectionStr = Configuration.GetConnectionString("ManagerConnection");
             services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("Models")));
             //   services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr));
@@ -53,7 +57,7 @@ namespace API
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mananger.API", Version = "v1", Description = "ManagerøÚº‹API" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mananger.API", Version = "v1", Description = "Manager???API" });
                 foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.xml"))
                 {
                     c.IncludeXmlComments(file, true);
@@ -62,10 +66,10 @@ namespace API
                 c.OperationFilter<AddResponseHeadersFilter>();
                 c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
-                //ÃÌº”«Î«ÛÕ∑≈‰÷√
+                //????????????
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
-                    Description = "‘⁄œ¬øÚ÷– ‰»Î«Î«ÛÕ∑÷––Ë“™ÃÌº”Jwt ⁄»®Token£∫Bearer Token",
+                    Description = "????????????????????????Jwt???Token??Bearer Token",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
@@ -73,20 +77,18 @@ namespace API
                     Scheme = "Bearer"
                 });
 
-                //ÃÌº”xml◊¢ ÕŒƒµµ
+                //???xml??????
                 var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);
                 var xmlPath = Path.Combine(basePath ?? string.Empty, "API.xml");
                 c.IncludeXmlComments(xmlPath);
             });
-            //≈‰÷√»œ÷§∑˛ŒÒ
-            //“˝”√Microsoft.AspNetCore.Authentication.JwtBearer
+            //???????????
+            //????Microsoft.AspNetCore.Authentication.JwtBearer
             services.AddAuthentication(c =>
                 {
                     c.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     c.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }).AddJwtBearer(c =>
-            {
-                c.TokenValidationParameters = new TokenValidationParameters
+                }).AddJwtBearer(c => c.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = false,
@@ -96,31 +98,28 @@ namespace API
                     ValidAudience = Configuration["JWTSetting:JWTAudience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSetting:JWTKey"])),
                     ClockSkew = TimeSpan.Zero
-                };
-            });
-            //≈‰÷√–Ú¡–ªØ “˝”√Microsoft.AspNetCore.Mvc.NewtonsoftJson
+                });
+            //???????–ª? ????Microsoft.AspNetCore.Mvc.NewtonsoftJson
             services.AddControllers(options =>
             {
                 options.Filters.Add<ActionFilter>();
             }).AddNewtonsoftJson(setup =>
             {
-                //   setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//Õ’∑Â√¸√˚∑µªÿ
-                setup.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; //∫ˆ¬‘—≠ª∑“˝”√
-                setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //ƒ¨»œ»’∆⁄∏Ò ΩªØ
-                setup.SerializerSettings.ContractResolver = new NullToEmptyStringResolver();//ÃÊªªnull÷µŒ™string.empty
+
+                //   setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//È©ºÂ≥∞ÂëΩÂêçËøîÂõû
+                setup.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; //ÂøΩÁï•Âæ™ÁéØÂºïÁî®
+                setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //ÈªòËÆ§Êó•ÊúüÊ†ºÂºèÂåñ
+                setup.SerializerSettings.ContractResolver = new NullToEmptyStringResolver();//ÊõøÊç¢nullÂÄº‰∏∫string.empty
+
             });
 
-            //≈‰÷√memchche
-            services.AddMemoryCache(options =>
-            {
-                //…Ë÷√ª∫¥Êπ˝∆⁄ ±º‰Œ™30∑÷÷”,æÕ «»Áπ˚√ª”–ªÒ»°µƒª∞£¨30∑÷÷”“‘∫ÛæÕ÷±Ω”π˝∆⁄¡À
-                options.ExpirationScanFrequency = TimeSpan.FromMinutes(30);
-            });
+            //????memchche
+            services.AddMemoryCache(options => options.ExpirationScanFrequency = TimeSpan.FromMinutes(30));
 
-            //…Ë÷√httpcontext,»√∆‰À˚¿‡÷–“≤ƒ‹ π”√httpcontext
+            //????httpcontext,????????????????httpcontext
             services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
 
-            //◊¢»ÎQuartz∂® ±»ŒŒÒ◊Èº˛
+            //???Quartz??????????
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
 
@@ -134,11 +133,11 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            //◊¢»Î◊‘∂®“Âµƒlog÷–º‰º˛
+            //?????????log?–º??
             app.UseHttpContextLog();
-            // π”√◊‘∂®“Â“Ï≥£¥¶¿Ì
+            //??????????????
             app.UseExceptionHandle();
-            //IPπ˝¬À
+            //IP????
             app.UseIpFilter();
 
             app.UseSwagger();
@@ -148,18 +147,17 @@ namespace API
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
 
-            app.UseHttpsRedirection();
+           // app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCors("any");
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+
+            app.UseCors("any");
+            app.UseEndpoints(endpoints => endpoints.MapControllers().RequireCors("any"));
+
         }
     }
 }

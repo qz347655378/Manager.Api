@@ -14,7 +14,7 @@ namespace Models
         /// <param name="options"></param>
         public ManagerDbContext(DbContextOptions options) : base(options)
         {
-
+               
         }
 
 
@@ -54,40 +54,5 @@ namespace Models
     }
 
 
-    ///// <summary>
-    ///// sqlserver上下文支持
-    ///// </summary>
-    //public class SqlServerDbContext : ManagerDbContext
-    //{
-    //    /// <summary>
-    //    /// sqlserver上下文支持
-    //    /// </summary>
-    //    public SqlServerDbContext(DbContextOptions options) : base(options)
-    //    {
-    //    }
 
-    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //    {
-    //        optionsBuilder.UseSqlServer();
-    //    }
-    //}
-
-    ///// <summary>
-    ///// sqlite上下文支持
-    ///// </summary>
-    //public class SqliteDbContext : ManagerDbContext
-    //{
-    //    /// <summary>
-    //    /// sqlite上下文支持
-    //    /// </summary>
-    //    public SqliteDbContext(DbContextOptions options) : base(options)
-    //    {
-
-    //    }
-
-    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //    {
-    //        optionsBuilder.UseSqlite();
-    //    }
-    //}
 }
