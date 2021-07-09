@@ -54,6 +54,7 @@ namespace API
             services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("Models")));
             //   services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr));
 
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mananger.API", Version = "v1", Description = "Manager???API" });
@@ -98,16 +99,18 @@ namespace API
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSetting:JWTKey"])),
                     ClockSkew = TimeSpan.Zero
                 });
-            //???????��? ????Microsoft.AspNetCore.Mvc.NewtonsoftJson
+            //???????л? ????Microsoft.AspNetCore.Mvc.NewtonsoftJson
             services.AddControllers(options =>
             {
                 options.Filters.Add<ActionFilter>();
             }).AddNewtonsoftJson(setup =>
             {
-                //   setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//???????????
-                setup.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; //???????????
-                setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //???????????
-                setup.SerializerSettings.ContractResolver = new NullToEmptyStringResolver();//?�Inull??string.empty
+
+                //   setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//驼峰命名返回
+                setup.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; //忽略循环引用
+                setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //默认日期格式化
+                setup.SerializerSettings.ContractResolver = new NullToEmptyStringResolver();//替换null值为string.empty
+
             });
 
             //????memchche
@@ -130,7 +133,7 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            //?????????log?��??
+            //?????????log?м??
             app.UseHttpContextLog();
             //??????????????
             app.UseExceptionHandle();
@@ -151,8 +154,10 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
 
+
             app.UseCors("any");
             app.UseEndpoints(endpoints => endpoints.MapControllers().RequireCors("any"));
+
         }
     }
 }
