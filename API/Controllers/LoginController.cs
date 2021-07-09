@@ -44,8 +44,8 @@ namespace API.Controllers
                 //校验验证码
                 if (string.IsNullOrEmpty(capchat) || capchat != model.Captcha.ToLower())
                 {
-                    result.Msg = "验证码错误或已经过期";
-                    Log.Warning($"{model.UserName}登录，验证码错误或失效，登录失败");
+                    result.Msg = "验证码错误或已过期";
+                    Log.Warning($"【{model.UserName}】登录，验证码错误或失效，登录失败");
                     return result;
                 }
                 //移除验证码

@@ -29,6 +29,32 @@
             数据上下文
             </summary>
         </member>
+        <member name="M:Models.ManagerDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+            <summary>
+            数据上下文
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="P:Models.ManagerDbContext.UserInfos">
+            <summary>
+            用户表
+            </summary>
+        </member>
+        <member name="P:Models.ManagerDbContext.RoleInfos">
+            <summary>
+            角色表
+            </summary>
+        </member>
+        <member name="P:Models.ManagerDbContext.RoleActions">
+            <summary>
+            角色菜单表
+            </summary>
+        </member>
+        <member name="P:Models.ManagerDbContext.MenuActions">
+            <summary>
+            菜单表
+            </summary>
+        </member>
         <member name="M:Models.ManagerDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             当表被创建时

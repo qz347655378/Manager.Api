@@ -45,7 +45,7 @@ namespace API.Controllers.System
             };
 
             var list = await _menuActionBll.GetListAsync(c =>
-                 c.IsDelete == DeleteStatus.NoDelete && c.ActionStatus == EnableEnum.Enable);
+                 c.IsDelete == DeleteStatus.NoDelete);
             result.Data = list.OrderBy(c => c.Sort).ToList();
             return result;
         }
@@ -74,7 +74,7 @@ namespace API.Controllers.System
         /// 获取当前用户的菜单
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Action("Menu.GetCurrentUserMenuList")]
+        [HttpGet(nameof(GetCurrentUserMenuList)), Action("Menu.GetCurrentUserMenuList")]
         public async Task<ResponseResult<List<MenuAction>>> GetCurrentUserMenuList()
         {
             var result = new ResponseResult<List<MenuAction>>

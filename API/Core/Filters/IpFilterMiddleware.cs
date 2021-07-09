@@ -47,14 +47,14 @@ namespace API.Core.Filters
             var currentIp = context.GetClientIp();
             var result = JsonConvert.SerializeObject(new ResponseResult<string> { Msg = "当前IP禁止访问任何资源", Code = ResponseStatusEnum.BadRequest });
 
-            if (blacklist.Exists(c => c.Equals(currentIp)))
+            if (blacklist != null && blacklist.Exists(c => c.Equals(currentIp)))
             {
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync(result);
             }
 
-            if (whitelist.Count > 0 && whitelist.IndexOf("*") != -1 && whitelist.IndexOf(currentIp) != -1)
+            if (whitelist != null && whitelist.Count > 0 && whitelist.IndexOf("*") != -1 && whitelist.IndexOf(currentIp) != -1)
             {
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = 400;

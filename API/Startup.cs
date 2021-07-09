@@ -16,7 +16,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Quartz;
 using Quartz.Impl;
 using Swashbuckle.AspNetCore.Filters;
@@ -49,7 +48,7 @@ namespace API
             //添加数据库支持
             var connectionStr = Configuration.GetConnectionString("ManagerConnection");
             services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("Models")));
-
+            //   services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr));
 
 
             services.AddSwaggerGen(c =>
@@ -105,7 +104,7 @@ namespace API
                 options.Filters.Add<ActionFilter>();
             }).AddNewtonsoftJson(setup =>
             {
-             //   setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//驼峰命名返回
+                //   setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//驼峰命名返回
                 setup.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; //忽略循环引用
                 setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //默认日期格式化
                 setup.SerializerSettings.ContractResolver = new NullToEmptyStringResolver();//替换null值为string.empty
@@ -155,7 +154,7 @@ namespace API
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseCors("any");
 
             app.UseEndpoints(endpoints =>
             {
