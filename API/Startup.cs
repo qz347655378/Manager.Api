@@ -37,26 +37,26 @@ namespace API
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            // 直接用Autofac注册我们自定义的 
+            // ?????Autofac????????????? 
             builder.RegisterModule(new AutofacRegister());
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //设置跨域
+            //???????
             services.AddCors(c => c.AddPolicy("any",
                 builder => builder.SetIsOriginAllowed(_ => true).AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
             //services.AddCors(c=>c.AddPolicy("any", builder => builder.WithMethods("GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS")
-            //    //.AllowCredentials()//指定处理cookie
+            //    //.AllowCredentials()//???????cookie
             //    .AllowAnyOrigin()));
-            //添加数据库支持
+            //???????????
             var connectionStr = Configuration.GetConnectionString("ManagerConnection");
             services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("Models")));
-
+            //   services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr));
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mananger.API", Version = "v1", Description = "Manager框架API" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mananger.API", Version = "v1", Description = "Manager???API" });
                 foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.xml"))
                 {
                     c.IncludeXmlComments(file, true);
@@ -65,10 +65,10 @@ namespace API
                 c.OperationFilter<AddResponseHeadersFilter>();
                 c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
-                //添加请求头配置
+                //????????????
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
-                    Description = "在下框中输入请求头中需要添加Jwt授权Token：Bearer Token",
+                    Description = "????????????????????????Jwt???Token??Bearer Token",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
@@ -76,13 +76,13 @@ namespace API
                     Scheme = "Bearer"
                 });
 
-                //添加xml注释文档
+                //???xml??????
                 var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);
                 var xmlPath = Path.Combine(basePath ?? string.Empty, "API.xml");
                 c.IncludeXmlComments(xmlPath);
             });
-            //配置认证服务
-            //引用Microsoft.AspNetCore.Authentication.JwtBearer
+            //???????????
+            //????Microsoft.AspNetCore.Authentication.JwtBearer
             services.AddAuthentication(c =>
                 {
                     c.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -98,25 +98,25 @@ namespace API
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSetting:JWTKey"])),
                     ClockSkew = TimeSpan.Zero
                 });
-            //配置序列化 引用Microsoft.AspNetCore.Mvc.NewtonsoftJson
+            //???????л? ????Microsoft.AspNetCore.Mvc.NewtonsoftJson
             services.AddControllers(options =>
             {
                 options.Filters.Add<ActionFilter>();
             }).AddNewtonsoftJson(setup =>
             {
-                //   setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//驼峰命名返回
-                setup.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; //忽略循环引用
-                setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //默认日期格式化
-                setup.SerializerSettings.ContractResolver = new NullToEmptyStringResolver();//替换null值为string.empty
+                //   setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//???????????
+                setup.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; //???????????
+                setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //???????????
+                setup.SerializerSettings.ContractResolver = new NullToEmptyStringResolver();//?滻null??string.empty
             });
 
-            //配置memchche
+            //????memchche
             services.AddMemoryCache(options => options.ExpirationScanFrequency = TimeSpan.FromMinutes(30));
 
-            //设置httpcontext,让其他类中也能使用httpcontext
+            //????httpcontext,????????????????httpcontext
             services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
 
-            //注入Quartz定时任务组件
+            //???Quartz??????????
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
 
@@ -130,11 +130,11 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            //注入自定义的log中间件
+            //?????????log?м??
             app.UseHttpContextLog();
-            //使用自定义异常处理
+            //??????????????
             app.UseExceptionHandle();
-            //IP过滤
+            //IP????
             app.UseIpFilter();
 
             app.UseSwagger();
