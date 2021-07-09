@@ -14,7 +14,7 @@ namespace Models
         /// <param name="options"></param>
         public ManagerDbContext(DbContextOptions options) : base(options)
         {
-
+               
         }
 
 
