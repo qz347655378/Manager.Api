@@ -62,7 +62,7 @@ namespace API.Core.JWT
             var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer", "").Trim();
             if (string.IsNullOrEmpty(token))
             {
-                return new UserInfo();
+                return null;
             }
             var claims = new JwtSecurityToken(token).Claims;
             var enumerable = claims.ToList();
