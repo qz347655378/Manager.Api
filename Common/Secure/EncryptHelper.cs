@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Common.Secure
 {
+    /// <summary>
+    /// 加解密帮助类
+    /// </summary>
     public static class EncryptHelper
     {
         /// <summary>

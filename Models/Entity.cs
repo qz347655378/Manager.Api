@@ -5,6 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models
 {
+
+    /// <summary>
+    /// 实体基类
+    /// </summary>
     public class Entity
     {
         /// <summary>

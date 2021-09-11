@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Models.Migrations
 {
-    public partial class init : Migration
+    public partial class blogManager : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,12 +13,12 @@ namespace Models.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ActionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ActionName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     ActionType = table.Column<int>(type: "int", nullable: false),
-                    ActionUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ActionUrl = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     ActionStatus = table.Column<int>(type: "int", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Icon = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Icon = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ParentId = table.Column<int>(type: "int", nullable: false),
                     Sort = table.Column<int>(type: "int", nullable: true),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -36,7 +36,7 @@ namespace Models.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RoleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     RoleStatus = table.Column<int>(type: "int", nullable: false),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EditTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -54,10 +54,7 @@ namespace Models.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<int>(type: "int", nullable: false),
-                    ActionId = table.Column<int>(type: "int", nullable: false),
-                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EditTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDelete = table.Column<int>(type: "int", nullable: false)
+                    ActionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -82,12 +79,12 @@ namespace Models.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Account = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Nickname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Account = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Nickname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     UserType = table.Column<int>(type: "int", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Mobile = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Ip = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Mobile = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Ip = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     AccountStatus = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -108,12 +105,12 @@ namespace Models.Migrations
             migrationBuilder.InsertData(
                 table: "RoleInfo",
                 columns: new[] { "Id", "CreateTime", "EditTime", "IsDelete", "RoleName", "RoleStatus" },
-                values: new object[] { 1, new DateTime(2021, 6, 7, 18, 0, 10, 864, DateTimeKind.Local).AddTicks(9609), new DateTime(2021, 6, 7, 18, 0, 10, 864, DateTimeKind.Local).AddTicks(9613), 0, "Administrator", 0 });
+                values: new object[] { 1, new DateTime(2021, 9, 11, 11, 28, 33, 424, DateTimeKind.Local).AddTicks(9023), new DateTime(2021, 9, 11, 11, 28, 33, 424, DateTimeKind.Local).AddTicks(9023), 0, "Administrator", 0 });
 
             migrationBuilder.InsertData(
                 table: "UserInfo",
                 columns: new[] { "Id", "Account", "AccountStatus", "CreateTime", "EditTime", "Ip", "IsDelete", "Mobile", "Nickname", "Password", "RoleId", "UserType" },
-                values: new object[] { 1, "admin", 1, new DateTime(2021, 6, 7, 18, 0, 10, 862, DateTimeKind.Local).AddTicks(9855), new DateTime(2021, 6, 7, 18, 0, 10, 863, DateTimeKind.Local).AddTicks(8121), null, 0, "", "Administrator", "jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=", 1, 1 });
+                values: new object[] { 1, "admin", 1, new DateTime(2021, 9, 11, 11, 28, 33, 423, DateTimeKind.Local).AddTicks(108), new DateTime(2021, 9, 11, 11, 28, 33, 423, DateTimeKind.Local).AddTicks(8180), null, 0, "", "Administrator", "jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=", 1, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleAction_ActionId",
@@ -124,6 +121,18 @@ namespace Models.Migrations
                 name: "IX_RoleAction_RoleId",
                 table: "RoleAction",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleInfo_RoleName",
+                table: "RoleInfo",
+                column: "RoleName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserInfo_Account",
+                table: "UserInfo",
+                column: "Account",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserInfo_RoleId",

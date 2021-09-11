@@ -109,6 +109,85 @@
             普通用户
             </summary>
         </member>
+        <member name="T:Common.Net.NetHelper">
+            <summary>
+            网络请求帮助类
+            </summary>
+        </member>
+        <member name="M:Common.Net.NetHelper.Get(System.String,System.String)">
+            <summary>
+            get请求
+            </summary>
+            <param name="url"></param>
+            <param name="authorization">令牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Net.NetHelper.GetAsync(System.String,System.String)">
+            <summary>
+            异步get请求
+            </summary>
+            <param name="url"></param>
+            <param name="authorization"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Net.NetHelper.Post(System.String,System.String,System.String)">
+            <summary>
+            post请求
+            </summary>
+            <param name="url"></param>
+            <param name="data"></param>
+            <param name="authorization">令牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Net.NetHelper.Post(System.String,System.String,System.Text.Encoding,System.String,System.String)">
+            <summary>
+            post请求
+            </summary>
+            <param name="url"></param>
+            <param name="data"></param>
+            <param name="encode"></param>
+            <param name="contentType"></param>
+            <param name="authorization">令牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Net.NetHelper.PostAsync(System.String,System.String,System.Text.Encoding,System.String,System.String)">
+            <summary>
+            异步post请求
+            </summary>
+            <param name="url"></param>
+            <param name="data"></param>
+            <param name="encode"></param>
+            <param name="contentType"></param>
+            <param name="authorization">令牌</param>
+        </member>
+        <member name="M:Common.Net.NetHelper.PostAsync(System.String,System.String,System.String)">
+            <summary>
+            异步的Post网络请求
+            </summary>
+            <param name="url"></param>
+            <param name="data"></param>
+            <param name="authorization"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Net.NetHelper.Ping(System.String)">
+            <summary>
+            ping指定IP
+            </summary>
+            <param name="ip"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Net.NetHelper.PingAsync(System.String)">
+             <summary>
+            异步ping指定IP
+             </summary>
+             <param name="ip"></param>
+             <returns></returns>
+        </member>
+        <member name="T:Common.Secure.EncryptHelper">
+            <summary>
+            加解密帮助类
+            </summary>
+        </member>
         <member name="M:Common.Secure.EncryptHelper.Hash256Encrypt(System.String)">
             <summary>
             Hash256+base64加密

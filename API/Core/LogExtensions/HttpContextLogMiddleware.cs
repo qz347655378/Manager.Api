@@ -9,10 +9,7 @@ namespace API.Core.LogExtensions
     {
         private readonly RequestDelegate _next;
 
-        public HttpContextLogMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
+        public HttpContextLogMiddleware(RequestDelegate next) => _next = next;
 
         public async Task InvokeAsync(HttpContext context)
         {
@@ -26,7 +23,10 @@ namespace API.Core.LogExtensions
             LogContext.PushProperty("API", context.Request.Path);
             LogContext.PushProperty("RequestMethod", context.Request.Method);
             LogContext.PushProperty("ResponseStatus", context.Response.StatusCode);
-            LogContext.PushProperty("Account", JwtHelper.GetUserInfo(context).Account);
+
+            var account = JwtHelper.GetUserInfo(context)?.Account;
+            if (!string.IsNullOrEmpty(account))
+                LogContext.PushProperty("Account", JwtHelper.GetUserInfo(context).Account);
         }
     }
 

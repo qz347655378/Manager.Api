@@ -34,7 +34,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns>返回token及token过期时间</returns>
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<ResponseResult<LoginResponseModel>> LoginAsync([FromBody] LoginRequestModel model)
         {
             var result = new ResponseResult<LoginResponseModel>();

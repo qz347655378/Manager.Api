@@ -47,7 +47,7 @@
             菜单管理
             </summary>
         </member>
-        <member name="M:API.Controllers.System.MenuController.GetAllMenuList">
+        <member name="M:API.Controllers.System.MenuController.GetAllMenuList(System.Int32,System.Int32)">
             <summary>
             获取所有可用菜单信息
             </summary>

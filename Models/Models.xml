@@ -4,6 +4,11 @@
         <name>Models</name>
     </assembly>
     <members>
+        <member name="T:Models.Entity">
+            <summary>
+            实体基类
+            </summary>
+        </member>
         <member name="P:Models.Entity.Id">
             <summary>
             主键
@@ -60,6 +65,22 @@
             当表被创建时
             </summary>
             <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Models.ModelBuilderExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Models.ModelBuilderExtensions.Seed(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            初始化数据
+            </summary>
+            <param name="moduleBuilder"></param>
+        </member>
+        <member name="T:Models.System.MenuAction">
+            <summary>
+            菜单实体
+            </summary>
         </member>
         <member name="P:Models.System.MenuAction.ActionName">
             <summary>

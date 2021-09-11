@@ -121,7 +121,7 @@ namespace Common.Net
         /// <param name="contentType"></param>
         /// <param name="authorization">令牌</param>
         /// <returns></returns>
-        public static string Post(string url, string data, Encoding encode,string contentType, string authorization = "")
+        public static string Post(string url, string data, Encoding encode, string contentType, string authorization = "")
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
@@ -185,7 +185,14 @@ namespace Common.Net
         }
 
 
-     
+
+        /// <summary>
+        /// 异步的Post网络请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="data"></param>
+        /// <param name="authorization"></param>
+        /// <returns></returns>
         public static async Task<string> PostAsync(string url, string data, string authorization = "")
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);

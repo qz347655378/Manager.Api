@@ -10,8 +10,8 @@ using Models;
 namespace Models.Migrations
 {
     [DbContext(typeof(ManagerDbContext))]
-    [Migration("20210607100011_init")]
-    partial class init
+    [Migration("20210911095654_AddMenuInit")]
+    partial class AddMenuInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,7 +29,8 @@ namespace Models.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ActionName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("ActionStatus")
                         .HasColumnType("int");
@@ -38,10 +39,12 @@ namespace Models.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ActionUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
@@ -50,7 +53,8 @@ namespace Models.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("IsDelete")
                         .HasColumnType("int");
@@ -64,6 +68,68 @@ namespace Models.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MenuAction");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActionName = "系统管理",
+                            ActionStatus = 1,
+                            ActionType = 1,
+                            ActionUrl = "/",
+                            Code = "System",
+                            CreateTime = new DateTime(2021, 9, 11, 17, 56, 53, 568, DateTimeKind.Local).AddTicks(5679),
+                            EditTime = new DateTime(2021, 9, 11, 17, 56, 53, 568, DateTimeKind.Local).AddTicks(5926),
+                            Icon = "layui-icon-set",
+                            IsDelete = 0,
+                            ParentId = 0,
+                            Sort = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActionName = "用户管理",
+                            ActionStatus = 1,
+                            ActionType = 1,
+                            ActionUrl = "/System/User",
+                            Code = "System.User",
+                            CreateTime = new DateTime(2021, 9, 11, 17, 56, 53, 568, DateTimeKind.Local).AddTicks(7026),
+                            EditTime = new DateTime(2021, 9, 11, 17, 56, 53, 568, DateTimeKind.Local).AddTicks(7033),
+                            Icon = "",
+                            IsDelete = 0,
+                            ParentId = 1,
+                            Sort = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ActionName = "角色管理",
+                            ActionStatus = 1,
+                            ActionType = 1,
+                            ActionUrl = "/System/Role",
+                            Code = "System.Role",
+                            CreateTime = new DateTime(2021, 9, 11, 17, 56, 53, 568, DateTimeKind.Local).AddTicks(7072),
+                            EditTime = new DateTime(2021, 9, 11, 17, 56, 53, 568, DateTimeKind.Local).AddTicks(7072),
+                            Icon = "",
+                            IsDelete = 0,
+                            ParentId = 1,
+                            Sort = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ActionName = "菜单管理",
+                            ActionStatus = 1,
+                            ActionType = 1,
+                            ActionUrl = "/System/Menu",
+                            Code = "System.Role",
+                            CreateTime = new DateTime(2021, 9, 11, 17, 56, 53, 568, DateTimeKind.Local).AddTicks(7075),
+                            EditTime = new DateTime(2021, 9, 11, 17, 56, 53, 568, DateTimeKind.Local).AddTicks(7075),
+                            Icon = "",
+                            IsDelete = 0,
+                            ParentId = 1,
+                            Sort = 3
+                        });
                 });
 
             modelBuilder.Entity("Models.System.RoleAction", b =>
@@ -74,15 +140,6 @@ namespace Models.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("ActionId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EditTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IsDelete")
                         .HasColumnType("int");
 
                     b.Property<int>("RoleId")
@@ -114,12 +171,17 @@ namespace Models.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("RoleName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("RoleStatus")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleName")
+                        .IsUnique();
 
                     b.ToTable("RoleInfo");
 
@@ -127,8 +189,8 @@ namespace Models.Migrations
                         new
                         {
                             Id = 1,
-                            CreateTime = new DateTime(2021, 6, 7, 18, 0, 10, 864, DateTimeKind.Local).AddTicks(9609),
-                            EditTime = new DateTime(2021, 6, 7, 18, 0, 10, 864, DateTimeKind.Local).AddTicks(9613),
+                            CreateTime = new DateTime(2021, 9, 11, 17, 56, 53, 568, DateTimeKind.Local).AddTicks(3698),
+                            EditTime = new DateTime(2021, 9, 11, 17, 56, 53, 568, DateTimeKind.Local).AddTicks(3701),
                             IsDelete = 0,
                             RoleName = "Administrator",
                             RoleStatus = 0
@@ -143,7 +205,9 @@ namespace Models.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Account")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("AccountStatus")
                         .HasColumnType("int");
@@ -155,19 +219,24 @@ namespace Models.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Ip")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("IsDelete")
                         .HasColumnType("int");
 
                     b.Property<string>("Mobile")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Nickname")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -176,6 +245,9 @@ namespace Models.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Account")
+                        .IsUnique();
 
                     b.HasIndex("RoleId");
 
@@ -187,8 +259,8 @@ namespace Models.Migrations
                             Id = 1,
                             Account = "admin",
                             AccountStatus = 1,
-                            CreateTime = new DateTime(2021, 6, 7, 18, 0, 10, 862, DateTimeKind.Local).AddTicks(9855),
-                            EditTime = new DateTime(2021, 6, 7, 18, 0, 10, 863, DateTimeKind.Local).AddTicks(8121),
+                            CreateTime = new DateTime(2021, 9, 11, 17, 56, 53, 566, DateTimeKind.Local).AddTicks(3754),
+                            EditTime = new DateTime(2021, 9, 11, 17, 56, 53, 567, DateTimeKind.Local).AddTicks(2524),
                             IsDelete = 0,
                             Mobile = "",
                             Nickname = "Administrator",

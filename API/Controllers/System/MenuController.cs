@@ -36,21 +36,24 @@ namespace API.Controllers.System
         /// </summary>
         /// <returns></returns>
         [HttpGet(nameof(GetAllMenuList)), Action("Menu.GetAllMenuList")]
-        public async Task<ResponseResult<List<MenuAction>>> GetAllMenuList()
+        public async Task<ResponseResult<TableData<MenuAction>>> GetAllMenuList(int page, int limit)
         {
-            var result = new ResponseResult<List<MenuAction>>
+            var result = new ResponseResult<TableData<MenuAction>>
             {
                 Code = ResponseStatusEnum.Ok,
                 Msg = "请求成功"
             };
 
-            var list = await _menuActionBll.GetListAsync(c =>
-                 c.IsDelete == DeleteStatus.NoDelete);
-            result.Data = list.OrderBy(c => c.Sort).ToList();
+            var list = await _menuActionBll.GetPageListAsync(page, limit, out var totalCount,
+                c => c.IsDelete == DeleteStatus.NoDelete, c => c.Sort, true);
+            result.Data = new TableData<MenuAction>
+            {
+                TotalCount = totalCount,
+                CurrentPage = page,
+                List = list
+            };
             return result;
         }
-
-
 
         /// <summary>
         /// 根据角色ID获取角色的拥有的菜单权限

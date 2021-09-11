@@ -35,29 +35,25 @@ namespace API
         public IConfiguration Configuration { get; }
         public ILifetimeScope AutofacContainer { get; private set; }
 
+        //register autofac
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            // ?????Autofac????????????? 
             builder.RegisterModule(new AutofacRegister());
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //???????
+
             services.AddCors(c => c.AddPolicy("any",
                 builder => builder.SetIsOriginAllowed(_ => true).AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
-            //services.AddCors(c=>c.AddPolicy("any", builder => builder.WithMethods("GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS")
-            //    //.AllowCredentials()//???????cookie
-            //    .AllowAnyOrigin()));
-            //???????????
+
             var connectionStr = Configuration.GetConnectionString("ManagerConnection");
             services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr, c => c.MigrationsAssembly("Models")));
-            //   services.AddDbContextPool<ManagerDbContext>(options => options.UseSqlServer(connectionStr));
 
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mananger.API", Version = "v1", Description = "Manager???API" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mananger.API", Version = "v1", Description = "Manager.API" });
                 foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.xml"))
                 {
                     c.IncludeXmlComments(file, true);
@@ -66,10 +62,9 @@ namespace API
                 c.OperationFilter<AddResponseHeadersFilter>();
                 c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
-                //????????????
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
-                    Description = "????????????????????????Jwt???Token??Bearer Token",
+                    Description = "Bearer Token",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
@@ -77,13 +72,11 @@ namespace API
                     Scheme = "Bearer"
                 });
 
-                //???xml??????
                 var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);
                 var xmlPath = Path.Combine(basePath ?? string.Empty, "API.xml");
                 c.IncludeXmlComments(xmlPath);
             });
-            //???????????
-            //????Microsoft.AspNetCore.Authentication.JwtBearer
+
             services.AddAuthentication(c =>
                 {
                     c.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -99,7 +92,6 @@ namespace API
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSetting:JWTKey"])),
                     ClockSkew = TimeSpan.Zero
                 });
-            //???????л? ????Microsoft.AspNetCore.Mvc.NewtonsoftJson
             services.AddControllers(options =>
             {
                 options.Filters.Add<ActionFilter>();
@@ -108,18 +100,17 @@ namespace API
 
                 //   setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();//驼峰命名返回
                 setup.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; //忽略循环引用
+                //set default datetime format
                 setup.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss"; //默认日期格式化
                 setup.SerializerSettings.ContractResolver = new NullToEmptyStringResolver();//替换null值为string.empty
 
             });
 
-            //????memchche
             services.AddMemoryCache(options => options.ExpirationScanFrequency = TimeSpan.FromMinutes(30));
 
-            //????httpcontext,????????????????httpcontext
             services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
 
-            //???Quartz??????????
+            //Add Task Schedule
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
 
@@ -133,28 +124,26 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            //?????????log?м??
             app.UseHttpContextLog();
-            //??????????????
             app.UseExceptionHandle();
-            //IP????
             app.UseIpFilter();
 
             app.UseSwagger();
+            //Add Swagger Document
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
 
 
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
 
-           // app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-
+            //Allow Corss-domain
             app.UseCors("any");
             app.UseEndpoints(endpoints => endpoints.MapControllers().RequireCors("any"));
 

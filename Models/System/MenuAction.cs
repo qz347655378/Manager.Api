@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.System
 {
+    /// <summary>
+    /// 菜单实体
+    /// </summary>
     [Table(nameof(MenuAction))]
     public class MenuAction : Entity
     {

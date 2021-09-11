@@ -10,8 +10,8 @@ using Models;
 namespace Models.Migrations
 {
     [DbContext(typeof(ManagerDbContext))]
-    [Migration("20210607105816_edit")]
-    partial class edit
+    [Migration("20210911032833_blogManager")]
+    partial class blogManager
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,7 +29,8 @@ namespace Models.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ActionName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("ActionStatus")
                         .HasColumnType("int");
@@ -38,10 +39,12 @@ namespace Models.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ActionUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
@@ -50,7 +53,8 @@ namespace Models.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("IsDelete")
                         .HasColumnType("int");
@@ -74,15 +78,6 @@ namespace Models.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("ActionId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EditTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IsDelete")
                         .HasColumnType("int");
 
                     b.Property<int>("RoleId")
@@ -114,12 +109,17 @@ namespace Models.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("RoleName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("RoleStatus")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleName")
+                        .IsUnique();
 
                     b.ToTable("RoleInfo");
 
@@ -127,8 +127,8 @@ namespace Models.Migrations
                         new
                         {
                             Id = 1,
-                            CreateTime = new DateTime(2021, 6, 7, 18, 58, 16, 172, DateTimeKind.Local).AddTicks(4694),
-                            EditTime = new DateTime(2021, 6, 7, 18, 58, 16, 172, DateTimeKind.Local).AddTicks(4698),
+                            CreateTime = new DateTime(2021, 9, 11, 11, 28, 33, 424, DateTimeKind.Local).AddTicks(9023),
+                            EditTime = new DateTime(2021, 9, 11, 11, 28, 33, 424, DateTimeKind.Local).AddTicks(9023),
                             IsDelete = 0,
                             RoleName = "Administrator",
                             RoleStatus = 0
@@ -143,7 +143,9 @@ namespace Models.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Account")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("AccountStatus")
                         .HasColumnType("int");
@@ -155,19 +157,24 @@ namespace Models.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Ip")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("IsDelete")
                         .HasColumnType("int");
 
                     b.Property<string>("Mobile")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Nickname")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -178,8 +185,7 @@ namespace Models.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Account")
-                        .IsUnique()
-                        .HasFilter("[Account] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("RoleId");
 
@@ -191,8 +197,8 @@ namespace Models.Migrations
                             Id = 1,
                             Account = "admin",
                             AccountStatus = 1,
-                            CreateTime = new DateTime(2021, 6, 7, 18, 58, 16, 170, DateTimeKind.Local).AddTicks(5717),
-                            EditTime = new DateTime(2021, 6, 7, 18, 58, 16, 171, DateTimeKind.Local).AddTicks(3820),
+                            CreateTime = new DateTime(2021, 9, 11, 11, 28, 33, 423, DateTimeKind.Local).AddTicks(108),
+                            EditTime = new DateTime(2021, 9, 11, 11, 28, 33, 423, DateTimeKind.Local).AddTicks(8180),
                             IsDelete = 0,
                             Mobile = "",
                             Nickname = "Administrator",

@@ -37,13 +37,14 @@ namespace API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    //此处不叫UseSerilog,加了会把系统级别的日志写入
+                    //此处不加UseSerilog,加了会把系统级别的日志写入
                 });
 
         private static IConfiguration Configuration
         {
             get
             {
+                //set configuation file
                 var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json")
                     .AddJsonFile("appsettings.Development.json").Build();
                 return builder;
