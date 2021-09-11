@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("api/sys/[controller]")]
+    [Route("api/[controller]")]
     [ApiController, Authorize]
     public class DataBaseController : BaseController
     {

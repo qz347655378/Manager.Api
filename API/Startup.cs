@@ -53,7 +53,7 @@ namespace API
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mananger.API", Version = "v1", Description = "Manager.API" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Manager.API", Version = "v1", Description = "Manager.API" });
                 foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.xml"))
                 {
                     c.IncludeXmlComments(file, true);

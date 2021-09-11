@@ -86,6 +86,16 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.System.UserController.GetUserInfo(System.Int32,System.Int32,System.String,System.Int32)">
+            <summary>
+            获取所有未删除用户
+            </summary>
+            <param name="page"></param>
+            <param name="limit"></param>
+            <param name="userName">用户名称</param>
+            <param name="roleId">角色ID</param>
+            <returns></returns>
+        </member>
         <member name="T:API.Core.Autofac.AutofacRegister">
             <summary>
             通过反射的方式实现注入
@@ -181,7 +191,7 @@
             <summary>
             获取时间戳  13位
             </summary>
-            <param name="dtime">The dtime.</param>
+            <param name="dt">时间</param>
             <returns></returns>
         </member>
         <member name="M:API.Core.JWT.JwtHelper.GetUserInfo(Microsoft.AspNetCore.Http.HttpContext)">
@@ -202,6 +212,12 @@
             </summary>
             <param name="context"></param>
             <returns></returns>
+        </member>
+        <member name="T:API.ViewModel.TableData`1">
+            <summary>
+            表格数据
+            </summary>
+            <typeparam name="T"></typeparam>
         </member>
         <member name="P:API.ViewModel.Login.CaptchaViewModel.Captcha">
             <summary>

@@ -35,6 +35,7 @@ namespace Models
             {
                 Id = 1,
                 RoleName = nameof(UserType.Administrator),
+                RoleStatus = EnableEnum.Enable
             });
 
             //初始化菜单

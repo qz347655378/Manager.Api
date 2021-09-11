@@ -14,20 +14,21 @@ using Serilog;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Common.Cache;
 
 namespace API.Controllers
 {
-    [Route("api/sys/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class LoginController : BaseController
     {
         private readonly IUserInfoBll _userInfoBll;
-        private readonly IMemoryCache _memoryCache;
+       // private readonly IMemoryCache _memoryCache;
 
-        public LoginController(IUserInfoBll userInfoBll, IMemoryCache memoryCache)
+        public LoginController(IUserInfoBll userInfoBll/*, IMemoryCache memoryCache*/)
         {
             _userInfoBll = userInfoBll;
-            _memoryCache = memoryCache;
+           // _memoryCache = memoryCache;
         }
         /// <summary>
         /// 用户登录
@@ -40,7 +41,8 @@ namespace API.Controllers
             var result = new ResponseResult<LoginResponseModel>();
             try
             {
-                var capchat = _memoryCache.Get<string>(model.CaptchaKey);
+                // var capchat = _memoryCache.Get<string>(model.CaptchaKey);
+                var capchat = MemoryCacheHelper.Cache.Get<string>(model.CaptchaKey);
                 //校验验证码
                 if (string.IsNullOrEmpty(capchat) || capchat != model.Captcha.ToLower())
                 {
@@ -49,7 +51,8 @@ namespace API.Controllers
                     return result;
                 }
                 //移除验证码
-                _memoryCache.Remove(model.CaptchaKey);
+                //_memoryCache.Remove(model.CaptchaKey);
+                MemoryCacheHelper.Cache.Remove(model.CaptchaKey);
                 var userInfo = await _userInfoBll.LoginAsync(model.UserName, EncryptHelper.Hash256Encrypt(model.Password));
                 if (userInfo != null)
                 {
@@ -57,7 +60,7 @@ namespace API.Controllers
                     if (userInfo.AccountStatus == EnableEnum.Disable)
                     {
                         result.Msg = "账号已被禁用";
-                        // Log.Warning($"{model.UserName}登录，账号已被禁用，登录失败", nameof(LoginAsync), ip);
+                        Log.Warning($"{model.UserName}登录失败，{result.Msg}");
                         return result;
                     }
                     var claims = new[]
@@ -70,15 +73,21 @@ namespace API.Controllers
                     };
                     result.Msg = "登录成功";
                     result.Code = ResponseStatusEnum.Ok;
+                    var expired = DateTime.Now.AddDays(3);
                     result.Data = new LoginResponseModel
                     {
-                        Expired = JwtHelper.GetTimeStamp(DateTime.Now.AddDays(30)),
+                        Expired = JwtHelper.GetTimeStamp(expired),
                         Token = JwtHelper.BuildJwtToken(claims)
                     };
                     userInfo.Ip = HttpContext.GetClientIp();
-                    userInfo.EditTime = DateTime.Now;
+                    userInfo.LastLoginTime = DateTime.Now;
                     //修改用户登录信息
                     await _userInfoBll.EditAsync(userInfo);
+
+                    //将token加入到缓存中，用来踢用户下线
+                    // _memoryCache.Set(userInfo.Account, result.Data.Token,expired);
+
+                    MemoryCacheHelper.Cache.Set(userInfo.Account, result.Data.Token, expired);
 
                     Log.Information($"{model.UserName}登录成功");
                 }
@@ -126,7 +135,8 @@ namespace API.Controllers
                 //                absoluteExpiration = new DateTimeOffset(DateTime.Now.AddSeconds(5));
 
                 //#endif
-                _memoryCache.Set(key, code.ToLower(), absoluteExpiration: absoluteExpiration);
+                //_memoryCache.Set(key, code.ToLower(), absoluteExpiration: absoluteExpiration);
+                MemoryCacheHelper.Cache.Set(key, code.ToLower(), absoluteExpiration: absoluteExpiration);
 
                 Log.Information("获取验证码");
             }

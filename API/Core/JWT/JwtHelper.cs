@@ -9,11 +9,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Common.Cache;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace API.Core.JWT
 {
-    public static class JwtHelper
+    public static  class JwtHelper
     {
+       
 
         /// <summary>
         /// 创建JWTToken
@@ -43,11 +46,11 @@ namespace API.Core.JWT
         /// <summary>
         /// 获取时间戳  13位
         /// </summary>
-        /// <param name="dtime">The dtime.</param>
+        /// <param name="dt">时间</param>
         /// <returns></returns>
-        public static long GetTimeStamp(DateTime dtime)
+        public static long GetTimeStamp(DateTime dt)
         {
-            var ts = dtime - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            var ts = dt - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(ts.TotalSeconds * 1000);
         }
 
@@ -67,14 +70,18 @@ namespace API.Core.JWT
             var claims = new JwtSecurityToken(token).Claims;
             var enumerable = claims.ToList();
             Enum.TryParse(enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.UserType))?.Value ?? "", out UserType ut);
-            return new UserInfo
-            {
-                Id = Convert.ToInt32(enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Id))?.Value ?? ""),
-                Mobile = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Mobile))?.Value ?? "",
-                Nickname = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Nickname))?.Value ?? "",
-                Account = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Account))?.Value ?? "",
-                UserType = ut
-            };
+            var account = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Account))?.Value ?? "";
+            MemoryCacheHelper.Cache.TryGetValue(account, out string cacheToken);
+            return string.IsNullOrEmpty(cacheToken)
+                ? null
+                : new UserInfo
+                {
+                    Id = Convert.ToInt32(enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Id))?.Value ?? ""),
+                    Mobile = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Mobile))?.Value ?? "",
+                    Nickname = enumerable.FirstOrDefault(c => c.Type == nameof(UserInfo.Nickname))?.Value ?? "",
+                    Account = account,
+                    UserType = ut
+                };
         }
     }
 }

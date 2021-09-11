@@ -12,17 +12,19 @@ using Serilog;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common.Cache;
+using Common.Secure;
 
 namespace API.Core.Filters
 {
     public class ActionFilter : ActionFilterAttribute
     {
-        private readonly IMemoryCache _memoryCache;
+        //   private readonly IMemoryCache _memoryCache;
         private readonly IRoleActonBll _roleActonBll;
 
-        public ActionFilter(IMemoryCache memoryCache, IRoleActonBll roleActonBll)
+        public ActionFilter(/*IMemoryCache memoryCache, */IRoleActonBll roleActonBll)
         {
-            _memoryCache = memoryCache;
+            //  _memoryCache = memoryCache;
             _roleActonBll = roleActonBll;
         }
 
@@ -39,12 +41,30 @@ namespace API.Core.Filters
             var action = desc.MethodInfo.GetCustomAttributes(typeof(ActionAttribute), false).FirstOrDefault() as ActionAttribute;
             if (action == null) return base.OnActionExecutionAsync(context, next);
             var userInfo = JwtHelper.GetUserInfo(context.HttpContext);
-            var actionList = _memoryCache.Get<List<MenuAction>>(userInfo.Account);
+
+            if (userInfo == null)
+            {
+                var result = new ResponseResult<string>
+                {
+                    Msg = "请先登录",
+                    Code = ResponseStatusEnum.Unauthorized
+                };
+                context.HttpContext.Response.ContentType = "application/json";
+                context.HttpContext.Response.StatusCode = 401;
+                context.HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result));
+                return base.OnActionExecutionAsync(context, next); ;
+            }
+
+            // var actionList = _memoryCache.Get<List<MenuAction>>(userInfo.Account);
+            var key = EncryptHelper.Hash256Encrypt(userInfo.Account);
+
+            var actionList = MemoryCacheHelper.Cache.Get<List<MenuAction>>(key);
             if (actionList == null)
             {
                 actionList = _roleActonBll.GetRoleAction(userInfo.RoleId, userInfo.UserType == UserType.Administrator).Result;
                 //将用户权限放进缓存中，缓存默认30分钟动态过期
-                _memoryCache.Set(userInfo.Account, actionList);
+               // _memoryCache.Set(userInfo.Account, actionList);
+               MemoryCacheHelper.Cache.Set(key, actionList);
             }
             if (actionList.Find(c => c.Code.Equals(action.Code)) == null && userInfo.UserType != UserType.Administrator)
             {

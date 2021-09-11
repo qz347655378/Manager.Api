@@ -1,8 +1,10 @@
-﻿using IBLL.System;
+﻿using System;
+using IBLL.System;
 using IDAL;
 using Models.System;
 using System.Linq;
 using System.Threading.Tasks;
+using Common.Enum;
 
 namespace BLL.System
 {
@@ -20,7 +22,9 @@ namespace BLL.System
         /// <returns></returns>
         public async Task<UserInfo> LoginAsync(string account, string password)
         {
-            var list = await GetListAsync(c => c.Account == account && c.Password == password);
+            var list = await GetListAsync(c =>
+                c.Account == account && c.Password == password && c.IsDelete == DeleteStatus.NoDelete);
+
             return list.Any() ? list.FirstOrDefault() : null;
         }
     }

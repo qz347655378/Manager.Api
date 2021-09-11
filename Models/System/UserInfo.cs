@@ -1,4 +1,5 @@
-﻿using Common.Enum;
+﻿using System;
+using Common.Enum;
 using Common.Secure;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -49,6 +50,12 @@ namespace Models.System
         /// 账号状态
         /// </summary>
         public EnableEnum AccountStatus { get; set; }
+
+        /// <summary>
+        /// 最后一次登录时间
+        /// </summary>
+        public DateTime? LastLoginTime { get; set; }
+
 
         /// <summary>
         /// 角色ID

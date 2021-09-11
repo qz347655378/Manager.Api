@@ -17,7 +17,7 @@ namespace API.Controllers.System
     /// <summary>
     /// 菜单管理
     /// </summary>
-    [Route("api/Menu/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
     public class MenuController : ControllerBase
