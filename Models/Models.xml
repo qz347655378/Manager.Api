@@ -232,6 +232,11 @@
             账号状态
             </summary>
         </member>
+        <member name="P:Models.System.UserInfo.LastLoginTime">
+            <summary>
+            最后一次登录时间
+            </summary>
+        </member>
         <member name="P:Models.System.UserInfo.RoleId">
             <summary>
             角色ID
