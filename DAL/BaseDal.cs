@@ -109,8 +109,10 @@ namespace DAL
         /// <returns></returns>
         public async Task<T> EditAsync(T model)
         {
+
             var entity = _dbContext.Set<T>().Update(model).Entity;
-            return await _dbContext.SaveChangesAsync() > 0 ? entity : null;
+            var m = await _dbContext.SaveChangesAsync();
+            return m > 0 ? entity : null;
         }
 
 

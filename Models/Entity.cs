@@ -33,7 +33,7 @@ namespace Models
         /// 是否删除
         /// </summary>
         [Required]
-        public DeleteStatus IsDelete { get; set; }
+        public DeleteStatus IsDelete { get; set; } = DeleteStatus.NoDelete;
 
 
     }

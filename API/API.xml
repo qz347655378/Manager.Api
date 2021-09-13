@@ -96,6 +96,35 @@
             <param name="roleId">角色ID</param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.System.UserController.Add(API.ViewModel.System.AddOrEditUserViewModel)">
+            <summary>
+            添加普通用户
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.System.UserController.Edit(API.ViewModel.System.AddOrEditUserViewModel)">
+            <summary>
+            编辑用户
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.System.UserController.Remove(System.Int32)">
+            <summary>
+            删除用户
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.System.UserController.SetUserStatus(System.Int32,Common.Enum.EnableEnum)">
+            <summary>
+            设置用户状态
+            </summary>
+            <param name="id"></param>
+            <param name="accountStatus"></param>
+            <returns></returns>
+        </member>
         <member name="T:API.Core.Autofac.AutofacRegister">
             <summary>
             通过反射的方式实现注入
@@ -110,14 +139,6 @@
             <summary>
             指定验证属性
             </summary>
-        </member>
-        <member name="M:API.Core.Filters.ActionFilter.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
-            <summary>
-            权限校验
-            </summary>
-            <param name="context"></param>
-            <param name="next"></param>
-            <returns></returns>
         </member>
         <member name="M:API.Core.Filters.IpFilterExtensions.UseIpFilter(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
@@ -287,6 +308,36 @@
         <member name="P:API.ViewModel.ResponseResult`1.Data">
             <summary>
             数据
+            </summary>
+        </member>
+        <member name="T:API.ViewModel.System.AddOrEditUserViewModel">
+            <summary>
+            用户添加或编辑实体类
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.System.AddOrEditUserViewModel.Account">
+            <summary>
+            登录账号
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.System.AddOrEditUserViewModel.Nickname">
+            <summary>
+            用户昵称
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.System.AddOrEditUserViewModel.Password">
+            <summary>
+            登录密码
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.System.AddOrEditUserViewModel.Mobile">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:API.ViewModel.System.AddOrEditUserViewModel.RoleId">
+            <summary>
+            角色Id
             </summary>
         </member>
     </members>

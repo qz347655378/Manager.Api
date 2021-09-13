@@ -22,6 +22,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.IO;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API
 {
@@ -113,6 +114,15 @@ namespace API
             //Add Task Schedule
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
+            //关闭自带的参数校验
+            services.Configure<ApiBehaviorOptions>(c =>
+            {
+                c.SuppressModelStateInvalidFilter = true;
+            });
+
+            //添加本地化支持
+            services.AddLocalization();
+
 
         }
 
@@ -142,6 +152,19 @@ namespace API
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //注册本地化
+            var languageList = new[]
+            {
+                "zh","en"
+            };
+
+            app.UseRequestLocalization(c =>
+            {
+                c.SetDefaultCulture("zh");
+                c.AddSupportedCultures(languageList);
+                c.AddSupportedUICultures(languageList);
+            });
 
             //Allow Corss-domain
             app.UseCors("any");

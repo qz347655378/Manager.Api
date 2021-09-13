@@ -142,6 +142,11 @@
             普通用户
             </summary>
         </member>
+        <member name="T:Common.Language.Language">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Common.Net.NetHelper">
             <summary>
             网络请求帮助类
