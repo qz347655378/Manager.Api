@@ -10,8 +10,8 @@ using Models;
 namespace Models.Migrations
 {
     [DbContext(typeof(ManagerDbContext))]
-    [Migration("20210911032833_blogManager")]
-    partial class blogManager
+    [Migration("20210914071857_fixSomeModel")]
+    partial class fixSomeModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,6 +68,68 @@ namespace Models.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MenuAction");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActionName = "系统管理",
+                            ActionStatus = 1,
+                            ActionType = 1,
+                            ActionUrl = "/",
+                            Code = "System",
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(1396),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(1643),
+                            Icon = "layui-icon-set",
+                            IsDelete = 0,
+                            ParentId = 0,
+                            Sort = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActionName = "用户管理",
+                            ActionStatus = 1,
+                            ActionType = 1,
+                            ActionUrl = "/System/User",
+                            Code = "System.User",
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2732),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2863),
+                            Icon = "",
+                            IsDelete = 0,
+                            ParentId = 1,
+                            Sort = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ActionName = "角色管理",
+                            ActionStatus = 1,
+                            ActionType = 1,
+                            ActionUrl = "/System/Role",
+                            Code = "System.Role",
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2919),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2919),
+                            Icon = "",
+                            IsDelete = 0,
+                            ParentId = 1,
+                            Sort = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ActionName = "菜单管理",
+                            ActionStatus = 1,
+                            ActionType = 1,
+                            ActionUrl = "/System/Menu",
+                            Code = "System.Menu",
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2923),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2923),
+                            Icon = "",
+                            IsDelete = 0,
+                            ParentId = 1,
+                            Sort = 3
+                        });
                 });
 
             modelBuilder.Entity("Models.System.RoleAction", b =>
@@ -127,11 +189,11 @@ namespace Models.Migrations
                         new
                         {
                             Id = 1,
-                            CreateTime = new DateTime(2021, 9, 11, 11, 28, 33, 424, DateTimeKind.Local).AddTicks(9023),
-                            EditTime = new DateTime(2021, 9, 11, 11, 28, 33, 424, DateTimeKind.Local).AddTicks(9023),
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 21, DateTimeKind.Local).AddTicks(9213),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 21, DateTimeKind.Local).AddTicks(9217),
                             IsDelete = 0,
                             RoleName = "Administrator",
-                            RoleStatus = 0
+                            RoleStatus = 1
                         });
                 });
 
@@ -163,11 +225,15 @@ namespace Models.Migrations
                     b.Property<int>("IsDelete")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("LastLoginTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Mobile")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Nickname")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -197,8 +263,8 @@ namespace Models.Migrations
                             Id = 1,
                             Account = "admin",
                             AccountStatus = 1,
-                            CreateTime = new DateTime(2021, 9, 11, 11, 28, 33, 423, DateTimeKind.Local).AddTicks(108),
-                            EditTime = new DateTime(2021, 9, 11, 11, 28, 33, 423, DateTimeKind.Local).AddTicks(8180),
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 19, DateTimeKind.Local).AddTicks(9629),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 20, DateTimeKind.Local).AddTicks(8169),
                             IsDelete = 0,
                             Mobile = "",
                             Nickname = "Administrator",

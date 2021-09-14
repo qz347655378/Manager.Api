@@ -13,11 +13,12 @@ namespace Models.System
         /// <summary>
         /// 动作名称
         /// </summary>
-        [MaxLength(50)]
+        [MaxLength(50), Required()]
         public string ActionName { get; set; }
         /// <summary>
         /// 动作类型
         /// </summary>
+        [Required]
         public ActionType ActionType { get; set; }
         /// <summary>
         /// 动作路径
@@ -27,11 +28,12 @@ namespace Models.System
         /// <summary>
         /// 动作状态
         /// </summary>
+        [Required]
         public EnableEnum ActionStatus { get; set; }
         /// <summary>
         /// 标识码
         /// </summary>
-        [MaxLength(256)]
+        [MaxLength(256), Required]
         public string Code { get; set; }
         /// <summary>
         /// 图标
@@ -41,6 +43,7 @@ namespace Models.System
         /// <summary>
         /// 父ID
         /// </summary>
+        [Required]
         public int ParentId { get; set; }
         /// <summary>
         /// 排序

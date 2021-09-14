@@ -76,8 +76,8 @@ namespace Models.Migrations
                             ActionType = 1,
                             ActionUrl = "/",
                             Code = "System",
-                            CreateTime = new DateTime(2021, 9, 12, 0, 6, 43, 533, DateTimeKind.Local).AddTicks(9508),
-                            EditTime = new DateTime(2021, 9, 12, 0, 6, 43, 533, DateTimeKind.Local).AddTicks(9745),
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(1396),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(1643),
                             Icon = "layui-icon-set",
                             IsDelete = 0,
                             ParentId = 0,
@@ -91,8 +91,8 @@ namespace Models.Migrations
                             ActionType = 1,
                             ActionUrl = "/System/User",
                             Code = "System.User",
-                            CreateTime = new DateTime(2021, 9, 12, 0, 6, 43, 534, DateTimeKind.Local).AddTicks(770),
-                            EditTime = new DateTime(2021, 9, 12, 0, 6, 43, 534, DateTimeKind.Local).AddTicks(778),
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2732),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2863),
                             Icon = "",
                             IsDelete = 0,
                             ParentId = 1,
@@ -106,8 +106,8 @@ namespace Models.Migrations
                             ActionType = 1,
                             ActionUrl = "/System/Role",
                             Code = "System.Role",
-                            CreateTime = new DateTime(2021, 9, 12, 0, 6, 43, 534, DateTimeKind.Local).AddTicks(816),
-                            EditTime = new DateTime(2021, 9, 12, 0, 6, 43, 534, DateTimeKind.Local).AddTicks(817),
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2919),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2919),
                             Icon = "",
                             IsDelete = 0,
                             ParentId = 1,
@@ -120,9 +120,9 @@ namespace Models.Migrations
                             ActionStatus = 1,
                             ActionType = 1,
                             ActionUrl = "/System/Menu",
-                            Code = "System.Role",
-                            CreateTime = new DateTime(2021, 9, 12, 0, 6, 43, 534, DateTimeKind.Local).AddTicks(820),
-                            EditTime = new DateTime(2021, 9, 12, 0, 6, 43, 534, DateTimeKind.Local).AddTicks(821),
+                            Code = "System.Menu",
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2923),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 22, DateTimeKind.Local).AddTicks(2923),
                             Icon = "",
                             IsDelete = 0,
                             ParentId = 1,
@@ -187,8 +187,8 @@ namespace Models.Migrations
                         new
                         {
                             Id = 1,
-                            CreateTime = new DateTime(2021, 9, 12, 0, 6, 43, 533, DateTimeKind.Local).AddTicks(7432),
-                            EditTime = new DateTime(2021, 9, 12, 0, 6, 43, 533, DateTimeKind.Local).AddTicks(7440),
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 21, DateTimeKind.Local).AddTicks(9213),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 21, DateTimeKind.Local).AddTicks(9217),
                             IsDelete = 0,
                             RoleName = "Administrator",
                             RoleStatus = 1
@@ -231,6 +231,7 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Nickname")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -260,8 +261,8 @@ namespace Models.Migrations
                             Id = 1,
                             Account = "admin",
                             AccountStatus = 1,
-                            CreateTime = new DateTime(2021, 9, 12, 0, 6, 43, 529, DateTimeKind.Local).AddTicks(8172),
-                            EditTime = new DateTime(2021, 9, 12, 0, 6, 43, 532, DateTimeKind.Local).AddTicks(6479),
+                            CreateTime = new DateTime(2021, 9, 14, 15, 18, 57, 19, DateTimeKind.Local).AddTicks(9629),
+                            EditTime = new DateTime(2021, 9, 14, 15, 18, 57, 20, DateTimeKind.Local).AddTicks(8169),
                             IsDelete = 0,
                             Mobile = "",
                             Nickname = "Administrator",

@@ -93,7 +93,7 @@ namespace Models
                     ActionStatus = EnableEnum.Enable,
                     ActionType = ActionType.Menu,
                     ActionUrl = "/System/Menu",
-                    Code = "System.Role",
+                    Code = "System.Menu",
                     CreateTime = DateTime.Now,
                     EditTime = DateTime.Now,
                     Id = 4,

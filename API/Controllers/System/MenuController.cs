@@ -56,6 +56,30 @@ namespace API.Controllers.System
         }
 
         /// <summary>
+        /// 根据菜单父ID获取菜单列表
+        /// </summary>
+        /// <param name="menuParentId">菜单父Id</param>
+        /// <returns></returns>
+        [HttpGet(nameof(GetMenuByParentId)), Action("System.Menu.Read")]
+        public async Task<ResponseResult<List<DtreeViewModel>>> GetMenuByParentId(int menuParentId)
+        {
+            var result = new ResponseResult<List<DtreeViewModel>>
+            {
+                Code = ResponseStatusEnum.Ok,
+                Msg = "",
+            };
+
+            var list = await _menuActionBll.GetListAsync(c => c.ParentId == menuParentId && c.IsDelete == DeleteStatus.NoDelete);
+
+            var dtreeList = list.Select(menuAction => new DtreeViewModel { CheckArr = 0, Id = menuAction.Id, ParentId = menuAction.ParentId, Title = menuAction.ActionName }).ToList();
+            result.Data = dtreeList;
+
+            return result;
+        }
+
+
+
+        /// <summary>
         /// 根据角色ID获取角色的拥有的菜单权限
         /// </summary>
         /// <param name="roleId">角色ID</param>
@@ -172,4 +196,7 @@ namespace API.Controllers.System
         }
 
     }
+
+
+
 }
