@@ -1,5 +1,8 @@
 ﻿namespace Common.Enum
 {
+    /// <summary>
+    /// 菜单类型
+    /// </summary>
     public enum ActionType
     {
         /// <summary>

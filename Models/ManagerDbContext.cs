@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Models.System;
 
 namespace Models
@@ -14,7 +17,7 @@ namespace Models
         /// <param name="options"></param>
         public ManagerDbContext(DbContextOptions options) : base(options)
         {
-               
+
         }
 
 
@@ -51,6 +54,47 @@ namespace Models
             // base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
         }
+
+
+        /// <summary>
+        /// 保存更改
+        /// </summary>
+        /// <returns></returns>
+        public override int SaveChanges()
+        {
+            try
+            {
+                return base.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                //保存失败，用于处理并发
+                return -1;
+            }
+
+
+        }
+
+        /// <summary>
+        /// 保存更改
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            try
+            {
+                return base.SaveChangesAsync(cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                //出现并发异常,乐观锁
+                return Task.FromResult(-1);
+            }
+
+        }
+
+
     }
 
 

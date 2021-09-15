@@ -66,6 +66,19 @@
             </summary>
             <param name="modelBuilder"></param>
         </member>
+        <member name="M:Models.ManagerDbContext.SaveChanges">
+            <summary>
+            保存更改
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Models.ManagerDbContext.SaveChangesAsync(System.Threading.CancellationToken)">
+            <summary>
+            保存更改
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="T:Models.ModelBuilderExtensions">
             <summary>
             

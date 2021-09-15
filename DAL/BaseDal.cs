@@ -45,18 +45,17 @@ namespace DAL
             return result.ToListAsync();
         }
 
-        public T Add(T model)
+        public bool Add(T model)
         {
-            // _dbContext.Entry(model).State = EntityState.Added;
-            var entity = _dbContext.Set<T>().Add(model).Entity;
-            return _dbContext.SaveChanges() > 0 ? entity : null;
+            _dbContext.Entry(model).State = EntityState.Added;
 
+            return _dbContext != null && _dbContext.SaveChanges() > 0;
         }
 
-        public async Task<T> AddAsync(T model)
+        public async Task<bool> AddAsync(T model)
         {
             var entity = _dbContext.Set<T>().AddAsync(model).AsTask().Result.Entity;
-            return await _dbContext.SaveChangesAsync() > 0 ? entity : null;
+            return await _dbContext.SaveChangesAsync() > 0;
 
         }
 
@@ -68,26 +67,20 @@ namespace DAL
         public bool Delete(Expression<Func<T, bool>> whereLambda)
         {
             var list = _dbContext.Set<T>().Where(whereLambda).ToList();
-            list.ForEach(c =>
-            {
-                _dbContext.Entry(c).State = EntityState.Deleted;
-            });
+            _dbContext.Set<T>().RemoveRange(list);
             return _dbContext.SaveChanges() > 0;
 
         }
 
         /// <summary>
-        /// 异步硬删除
+        /// 异步硬删除,可以实现批量删除
         /// </summary>
         /// <param name="whereLambda"></param>
         /// <returns></returns>
         public async Task<bool> DeleteAsync(Expression<Func<T, bool>> whereLambda)
         {
             var list = await _dbContext.Set<T>().Where(whereLambda).ToListAsync();
-            list.ForEach(c =>
-            {
-                _dbContext.Entry(c).State = EntityState.Deleted;
-            });
+            _dbContext.Set<T>().RemoveRange(list);
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
@@ -96,10 +89,10 @@ namespace DAL
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public T Edit(T model)
+        public bool Edit(T model)
         {
             var entity = _dbContext.Set<T>().Update(model).Entity;
-            return _dbContext.SaveChanges() > 0 ? entity : null;
+            return _dbContext.SaveChanges() > 0;
         }
 
         /// <summary>
@@ -107,13 +100,37 @@ namespace DAL
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<T> EditAsync(T model)
+        public async Task<bool> EditAsync(T model)
         {
-
             var entity = _dbContext.Set<T>().Update(model).Entity;
             var m = await _dbContext.SaveChangesAsync();
-            return m > 0 ? entity : null;
+            return m > 0;
         }
+
+        /// <summary>
+        /// 异步编辑,只更新部分
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="propertyExpression"></param>
+        /// <returns></returns>
+        public async Task<bool> EditAsync<TProperty>(T model, Expression<Func<T, TProperty>> propertyExpression)
+        {
+            _dbContext.Entry(model).Property(propertyExpression).IsModified = true;
+            var count = await _dbContext.SaveChangesAsync();
+            //并发了
+            if (count != -1) return count > 0;
+            //再执行10次
+            for (var i = 0; i < 10; i++)
+            {
+                if (await EditAsync(model, propertyExpression))
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
 
 
         /// <summary>

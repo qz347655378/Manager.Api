@@ -48,13 +48,13 @@ namespace BLL
             return _currentDal.GetPageListAsync(page, limit, out totalCount, whereLambda, orderBy, isAsc);
         }
 
-        public T Add(T model)
+        public bool Add(T model)
         {
             return _currentDal.Add(model);
 
         }
 
-        public async Task<T> AddAsync(T model)
+        public async Task<bool> AddAsync(T model)
         {
             return await _currentDal.AddAsync(model);
 
@@ -71,6 +71,8 @@ namespace BLL
 
         }
 
+
+
         /// <summary>
         /// 异步硬删除
         /// </summary>
@@ -86,7 +88,7 @@ namespace BLL
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public T Edit(T model)
+        public bool Edit(T model)
         {
             return _currentDal.Edit(model);
         }
@@ -96,9 +98,21 @@ namespace BLL
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<T> EditAsync(T model)
+        public async Task<bool> EditAsync(T model)
         {
             return await _currentDal.EditAsync(model);
+        }
+
+
+        /// <summary>
+        /// 异步编辑,只更新部分
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="propertyExpression"></param>
+        /// <returns></returns>
+        public async Task<bool> EditAsync<TProperty>(T model, Expression<Func<T, TProperty>> propertyExpression)
+        {
+            return await _currentDal.EditAsync(model, propertyExpression);
         }
 
 

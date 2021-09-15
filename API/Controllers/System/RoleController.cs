@@ -74,7 +74,7 @@ namespace API.Controllers.System
             temp.IsDelete = DeleteStatus.Delete;
             temp.RoleStatus = EnableEnum.Disable;
             temp.EditTime = DateTime.Now;
-            return await _roleInfoBll.EditAsync(temp) != null
+            return await _roleInfoBll.EditAsync(temp)
                 ? (IActionResult)Ok(_localizer["OK"])
                 : BadRequest(_localizer["BadRequest"]);
         }
@@ -87,8 +87,7 @@ namespace API.Controllers.System
         [HttpPost(nameof(AddRole)), Action("System.Role.Add")]
         public async Task<IActionResult> AddRole([FromForm] RoleInfo model)
         {
-            var temp = await _roleInfoBll.AddAsync(model);
-            return temp == null ? (IActionResult)BadRequest(_localizer["BadRequest"]) : Ok(_localizer["OK"]);
+            return await _roleInfoBll.AddAsync(model) ? (IActionResult)BadRequest(_localizer["BadRequest"]) : Ok(_localizer["OK"]);
         }
 
 
@@ -105,7 +104,7 @@ namespace API.Controllers.System
             temp[0].RoleName = model.RoleName;
             temp[0].EditTime = DateTime.Now;
 
-            return await _roleInfoBll.EditAsync(temp[0]) != null
+            return await _roleInfoBll.EditAsync(temp[0])
                 ? (IActionResult)Ok(_localizer["OK"])
                 : BadRequest(_localizer["BadRequest"]);
         }
@@ -124,7 +123,7 @@ namespace API.Controllers.System
             role[0].RoleStatus = roleStatus;
             role[0].EditTime = DateTime.Now;
 
-            return await _roleInfoBll.EditAsync(role[0]) != null
+            return await _roleInfoBll.EditAsync(role[0])
                 ? (IActionResult)Ok(_localizer["OK"])
                 : BadRequest(_localizer["BadRequest"]);
         }

@@ -68,14 +68,23 @@ namespace IBLL
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        T Edit(T model);
+        bool Edit(T model);
 
         /// <summary>
         /// 异步编辑
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<T> EditAsync(T model);
+        Task<bool> EditAsync(T model);
+
+
+        /// <summary>
+        /// 异步编辑,只更新部分
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="propertyExpression"></param>
+        /// <returns></returns>
+        Task<bool> EditAsync<TProperty>(T model, Expression<Func<T, TProperty>> propertyExpression);
 
 
         /// <summary>
@@ -83,14 +92,14 @@ namespace IBLL
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        T Add(T model);
+        bool Add(T model);
 
         /// <summary>
         /// 异步添加
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<T> AddAsync(T model);
+        Task<bool> AddAsync(T model);
 
         /// <summary>
         /// 执行sql语句

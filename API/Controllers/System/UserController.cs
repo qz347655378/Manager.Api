@@ -58,17 +58,13 @@ namespace API.Controllers.System
                     userName = "";
                 }
 
-                var list = await _userInfoBll.GetPageListAsync(page, limit, out var totalCount,
-                    c => c.IsDelete == 0 && (c.Account.Contains(userName) || c.RoleId == roleId), c => c.Id, true);
-
-                var list2 = await _userInfoBll.GetList(c => c.IsDelete == 0 && (c.Account.Contains(userName) || c.RoleId == roleId)).Include(c => c.RoleInfo).OrderBy(c => c.Id).Skip((page - 1) * page).Take(limit).ToListAsync();
-
-
+                var list2 = _userInfoBll.GetList(c => c.IsDelete == 0 && (c.Account.Contains(userName) || c.RoleId == roleId)).Include(c => c.RoleInfo);
+                var list = await list2.OrderBy(c => c.Id).Skip((page - 1) * page).Take(limit).ToListAsync();
                 result.Data = new TableData<UserInfo>
                 {
                     CurrentPage = page,
-                    TotalCount = totalCount,
-                    List = list2
+                    TotalCount = list2.Count(),
+                    List = list
                 };
             }
             catch (Exception e)
@@ -100,7 +96,7 @@ namespace API.Controllers.System
                     RoleId = model.RoleId
                 };
 
-                if (await _userInfoBll.AddAsync(user) != null)
+                if (await _userInfoBll.AddAsync(user))
                 {
                     result.Code = ResponseStatusEnum.Ok;
                     result.Msg = _localizer["OK"];
@@ -152,7 +148,7 @@ namespace API.Controllers.System
                     temp.RoleId = model.RoleId;
                     temp.EditTime = DateTime.Now;
 
-                    if (await _userInfoBll.EditAsync(temp) != null)
+                    if (await _userInfoBll.EditAsync(temp))
                     {
                         result.Code = ResponseStatusEnum.Ok;
                         result.Msg = _localizer["OK"];
@@ -192,7 +188,7 @@ namespace API.Controllers.System
             user.IsDelete = DeleteStatus.Delete;
             user.AccountStatus = EnableEnum.Disable;
             user.EditTime = DateTime.Now;
-            if (_userInfoBll.Edit(user) == null) return BadRequest(_localizer["InternalServerError"]);
+            if (_userInfoBll.Edit(user)) return BadRequest(_localizer["InternalServerError"]);
             return Ok(_localizer["OK"]);
         }
 
@@ -209,7 +205,7 @@ namespace API.Controllers.System
             if (!user.Any()) return new NotFoundObjectResult(_localizer["NotFound"]);
             user[0].AccountStatus = accountStatus;
             user[0].EditTime = DateTime.Now;
-            if (await _userInfoBll.EditAsync(user[0]) == null) return BadRequest();
+            if (await _userInfoBll.EditAsync(user[0])) return BadRequest();
             return new OkObjectResult(_localizer["OK"]);
         }
 

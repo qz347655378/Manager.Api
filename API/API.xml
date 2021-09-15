@@ -47,7 +47,7 @@
             菜单管理
             </summary>
         </member>
-        <member name="M:API.Controllers.System.MenuController.GetAllMenuList(System.Int32,System.Int32)">
+        <member name="M:API.Controllers.System.MenuController.GetAllMenuList">
             <summary>
             获取所有可用菜单信息
             </summary>
@@ -91,6 +91,21 @@
             <summary>
             修改角色菜单
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.System.MenuController.Remove(System.Int32)">
+            <summary>
+            移除菜单
+            </summary>
+            <param name="id">菜单ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.System.MenuController.AddOrEditMenuCallback(Common.Enum.OperationType,Models.System.MenuAction)">
+            <summary>
+            编辑获取添加菜单
+            </summary>
+            <param name="type"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="T:API.Controllers.System.RoleController">

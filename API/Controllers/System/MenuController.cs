@@ -1,4 +1,5 @@
-﻿using API.Core.Filters;
+﻿using System;
+using API.Core.Filters;
 using API.Core.JWT;
 using API.ViewModel;
 using API.ViewModel.Menu;
@@ -10,6 +11,8 @@ using Models.System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common.Language;
+using Microsoft.Extensions.Localization;
 
 
 namespace API.Controllers.System
@@ -24,11 +27,13 @@ namespace API.Controllers.System
     {
         private readonly IMenuActionBll _menuActionBll;
         private readonly IRoleActonBll _roleActonBll;
+        private readonly IStringLocalizer<Language> _localizer;
 
-        public MenuController(IMenuActionBll menuActionBll, IRoleActonBll roleActonBll)
+        public MenuController(IMenuActionBll menuActionBll, IRoleActonBll roleActonBll, IStringLocalizer<Language> localizer)
         {
             _menuActionBll = menuActionBll;
             _roleActonBll = roleActonBll;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -36,22 +41,17 @@ namespace API.Controllers.System
         /// </summary>
         /// <returns></returns>
         [HttpGet(nameof(GetAllMenuList)), Action("Menu.GetAllMenuList")]
-        public async Task<ResponseResult<TableData<MenuAction>>> GetAllMenuList(int page, int limit)
+        public async Task<ResponseResult<List<MenuAction>>> GetAllMenuList()
         {
-            var result = new ResponseResult<TableData<MenuAction>>
+            var result = new ResponseResult<List<MenuAction>>
             {
                 Code = ResponseStatusEnum.Ok,
                 Msg = "请求成功"
             };
 
-            var list = await _menuActionBll.GetPageListAsync(page, limit, out var totalCount,
-                c => c.IsDelete == DeleteStatus.NoDelete, c => c.Sort, true);
-            result.Data = new TableData<MenuAction>
-            {
-                TotalCount = totalCount,
-                CurrentPage = page,
-                List = list
-            };
+            var list = await _menuActionBll.GetListAsync(
+                c => c.IsDelete == DeleteStatus.NoDelete);
+            result.Data = list;
             return result;
         }
 
@@ -60,7 +60,7 @@ namespace API.Controllers.System
         /// </summary>
         /// <param name="menuParentId">菜单父Id</param>
         /// <returns></returns>
-        [HttpGet(nameof(GetMenuByParentId)), Action("System.Menu.Read")]
+        [HttpGet(nameof(GetMenuByParentId)), Action("Menu.Read")]
         public async Task<ResponseResult<List<DtreeViewModel>>> GetMenuByParentId(int menuParentId)
         {
             var result = new ResponseResult<List<DtreeViewModel>>
@@ -130,8 +130,7 @@ namespace API.Controllers.System
                 Data = ""
             };
 
-            var menu = await _menuActionBll.AddAsync(menuAction);
-            if (menu != null)
+            if (await _menuActionBll.AddAsync(menuAction))
             {
                 result.Msg = "添加成功";
                 result.Code = ResponseStatusEnum.Ok;
@@ -146,22 +145,10 @@ namespace API.Controllers.System
         /// <param name="menuAction"></param>
         /// <returns></returns>
         [HttpPost(nameof(MenuEdit)), Action("Menu.MenuEdit")]
-        public async Task<ResponseResult<string>> MenuEdit([FromBody] MenuAction menuAction)
+        public async Task<IActionResult> MenuEdit([FromBody] MenuAction menuAction)
         {
-            var result = new ResponseResult<string>
-            {
-                Msg = "修改失败",
-                Data = ""
-            };
-
-            var menu = await _menuActionBll.EditAsync(menuAction);
-            if (menu != null)
-            {
-                result.Msg = "修改成功";
-                result.Code = ResponseStatusEnum.Ok;
-            }
-
-            return result;
+            menuAction.EditTime = DateTime.Now;
+            return await AddOrEditMenuCallback(OperationType.Edit, menuAction);
         }
 
 
@@ -193,6 +180,54 @@ namespace API.Controllers.System
             }
 
             return result;
+        }
+
+
+        /// <summary>
+        /// 移除菜单
+        /// </summary>
+        /// <param name="id">菜单ID</param>
+        /// <returns></returns>
+        [HttpGet(nameof(Remove)), Action("Menu.Remove")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            var menu = await _menuActionBll.GetListAsync(c => c.Id == id);
+            if (!menu.Any()) return NotFound(_localizer["NotFound"]);
+            menu[0].IsDelete = DeleteStatus.Delete;
+            menu[0].ActionStatus = EnableEnum.Disable;
+            menu[0].EditTime = DateTime.Now;
+            return await AddOrEditMenuCallback(OperationType.Edit, menu[0]);
+        }
+
+
+        public async Task<IActionResult> SetMenuStatus(int id, EnableEnum status)
+        {
+            var menu = await _menuActionBll.GetListAsync(c => c.Id == id);
+            if (!menu.Any()) return NotFound(_localizer["NotFound"]);
+            menu[0].ActionStatus = status;
+            menu[0].EditTime = DateTime.Now;
+            return await AddOrEditMenuCallback(OperationType.Edit, menu[0]);
+        }
+
+
+        /// <summary>
+        /// 编辑获取添加菜单
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        private async Task<IActionResult> AddOrEditMenuCallback(OperationType type, MenuAction model)
+        {
+            return type switch
+            {
+                OperationType.Add => await _menuActionBll.AddAsync(model)
+                    ? (ActionResult)Ok(_localizer["OK"])
+                    : BadRequest(_localizer["BadRequest"]),
+                OperationType.Edit => await _menuActionBll.EditAsync(model)
+                    ? (ActionResult)Ok(_localizer["OK"])
+                    : BadRequest(_localizer["BadRequest"]),
+                _ => BadRequest(_localizer["BadRequest"])
+            };
         }
 
     }

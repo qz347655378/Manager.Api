@@ -37,6 +37,11 @@
             </summary>
             <param name="key"></param>
         </member>
+        <member name="T:Common.Enum.ActionType">
+            <summary>
+            菜单类型
+            </summary>
+        </member>
         <member name="F:Common.Enum.ActionType.Menu">
             <summary>
             菜单
@@ -85,6 +90,21 @@
         <member name="F:Common.Enum.EnableEnum.Disable">
             <summary>
             禁用
+            </summary>
+        </member>
+        <member name="T:Common.Enum.OperationType">
+            <summary>
+            操作类型
+            </summary>
+        </member>
+        <member name="F:Common.Enum.OperationType.Add">
+            <summary>
+            添加操作
+            </summary>
+        </member>
+        <member name="F:Common.Enum.OperationType.Edit">
+            <summary>
+            编辑操作
             </summary>
         </member>
         <member name="T:Common.Enum.ResponseStatusEnum">
