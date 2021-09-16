@@ -60,6 +60,23 @@ namespace BLL
 
         }
 
+
+        public bool Add(List<T> list)
+        {
+            return _currentDal.Add(list);
+
+        }
+
+        public async Task<bool> AddAsync(List<T> list)
+        {
+            return await _currentDal.AddAsync(list);
+
+        }
+
+
+
+
+
         /// <summary>
         /// 硬删除
         /// </summary>
@@ -70,6 +87,9 @@ namespace BLL
             return _currentDal.Delete(whereLambda);
 
         }
+
+
+
 
 
 

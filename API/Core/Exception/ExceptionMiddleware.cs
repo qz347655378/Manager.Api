@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Serilog;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Core.Exception
 {
@@ -27,21 +28,16 @@ namespace API.Core.Exception
             }
             catch (System.Exception e)
             {
-                await ExceptionHandleAsync(context, e).ConfigureAwait(false);
+                await ExceptionHandleAsync(context, e);
             }
         }
 
-        private static Task ExceptionHandleAsync(HttpContext context, System.Exception exception)
+        private static async Task ExceptionHandleAsync(HttpContext context, System.Exception exception)
         {
-            var result = new ResponseResult<string>
-            {
-                Msg = exception.Message,
-                Code = ResponseStatusEnum.InternalServerError
-            };
-            context.Response.ContentType = "application/json";
             Log.Error(exception, exception.Message);
-
-            return context.Response.WriteAsync(JsonConvert.SerializeObject(result));
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = 400;
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(new { code = ResponseStatusEnum.BadRequest, msg = exception.Message }));
         }
     }
 }

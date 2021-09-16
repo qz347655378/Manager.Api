@@ -13,4 +13,22 @@
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<EmbeddedResource Update="I18n\Language.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>Language.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+		<EmbeddedResource Update="I18n\Language.zh.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="I18n\Language.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Language.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
 </Project>

@@ -2,18 +2,18 @@
 using API.ViewModel;
 using API.ViewModel.System;
 using Common.Enum;
+using Common.I18n;
 using Common.Secure;
 using IBLL.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Models.System;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Common.Language;
-using Microsoft.Extensions.Localization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -82,34 +82,37 @@ namespace API.Controllers.System
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost(nameof(Add)), Action("User.Add")]
-        public async Task<ResponseResult<string>> Add([FromBody] AddOrEditUserViewModel model)
+        public async Task<IActionResult> Add([FromBody] UserInfo model)
         {
-            var result = new ResponseResult<string>();
-            try
-            {
-                var user = new UserInfo
-                {
-                    Account = model.Account,
-                    Password = model.Password,
-                    Mobile = model.Mobile,
-                    Nickname = model.Nickname,
-                    RoleId = model.RoleId
-                };
+            //var result = new ResponseResult<string>();
+            //try
+            //{
+            //    //var user = new UserInfo
+            //    //{
+            //    //    Account = model.Account,
+            //    //    Password = model.Password,
+            //    //    Mobile = model.Mobile,
+            //    //    Nickname = model.Nickname,  
+            //    //    RoleId = model.RoleId
+            //    //};
 
-                if (await _userInfoBll.AddAsync(user))
-                {
-                    result.Code = ResponseStatusEnum.Ok;
-                    result.Msg = _localizer["OK"];
-                }
+            //    if (await _userInfoBll.AddAsync(model))
+            //    {
+            //        result.Code = ResponseStatusEnum.Ok;
+            //        result.Msg = _localizer["OK"];
+            //    }
 
-            }
-            catch (Exception e)
-            {
-                result.Code = ResponseStatusEnum.InternalServerError;
-                result.Msg = e.Message;
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    result.Code = ResponseStatusEnum.InternalServerError;
+            //    result.Msg = e.Message;
+            //}
+            //return result;
 
-            return result;
+            return await _userInfoBll.AddAsync(model) ? (IActionResult)Ok(_localizer["OK"]) : BadRequest(_localizer["BadRequest"]);
+
+
         }
 
 

@@ -1,5 +1,4 @@
 ﻿using Common.Enum;
-using Common.Language;
 using Common.Secure;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,44 +18,39 @@ namespace Models.System
         /// <summary>
         /// 账号
         /// </summary>
-        [Display(Name = nameof(Account), ResourceType = typeof(Language))]
-        [Required(ErrorMessageResourceName = "AccountRequiredError", ErrorMessageResourceType = typeof(Language)), MaxLength(50)]
+        [Required(ErrorMessageResourceName = "AccountRequiredError", ErrorMessageResourceType = typeof(Common.I18n.Language)), MaxLength(50)]
         public string Account { get; set; }
 
         /// <summary>
         /// 昵称
         /// </summary>
-        [Display(Name = nameof(Nickname), ResourceType = typeof(Language))]
-        [Required(ErrorMessageResourceName = "NicknameRequiredError", ErrorMessageResourceType = typeof(Language)), MaxLength(50)]
+        [Required(ErrorMessageResourceName = "NicknameRequiredError", ErrorMessageResourceType = typeof(Common.I18n.Language)), MaxLength(50)]
         public string Nickname { get; set; }
 
         /// <summary>
         /// 用户类型
         /// </summary>
-        [Display(Name = nameof(UserType), ResourceType = typeof(Language))]
         public UserType UserType { get; set; } = UserType.Ordinary;
 
         /// <summary>
         /// 密码 默认密码123456
         /// </summary>
-        [Display(Name = nameof(Password), ResourceType = typeof(Language))]
-        [Required(ErrorMessageResourceName = "PasswordRequiredError", ErrorMessageResourceType = typeof(Language)), MaxLength(256)]
+        [Required(ErrorMessageResourceName = "PasswordRequiredError", ErrorMessageResourceType = typeof(Common.I18n.Language)), MaxLength(256)]
         public string Password { get; set; } = EncryptHelper.Hash256Encrypt("123456");
         /// <summary>
         /// 联系电话
         /// </summary>
-        [MaxLength(20), Display(Name = nameof(Mobile), ResourceType = typeof(Language))]
+        [MaxLength(20)]
         public string Mobile { get; set; }
         /// <summary>
         /// 最后一次登录时的IP
         /// </summary>
-        [MaxLength(50), Display(Name = nameof(Ip), ResourceType = typeof(Language))]
+        [MaxLength(50)]
         public string Ip { get; set; }
 
         /// <summary>
         /// 账号状态
         /// </summary>
-        [Display(Name = nameof(AccountStatus), ResourceType = typeof(Language))]
         public EnableEnum AccountStatus { get; set; } = EnableEnum.Enable;
 
         /// <summary>
@@ -68,6 +62,7 @@ namespace Models.System
         /// <summary>
         /// 角色ID
         /// </summary>
+        [Required(ErrorMessage = "角色ID不能为0")]
         public int RoleId { get; set; }
 
         /// <summary>

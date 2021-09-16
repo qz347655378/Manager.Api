@@ -29,79 +29,6 @@ namespace API.Core.Filters
             _roleActonBll = roleActonBll;
         }
 
-        ///// <summary>
-        ///// 权限校验
-        ///// </summary>
-        ///// <param name="context"></param>
-        ///// <param name="next"></param>
-        ///// <returns></returns>
-        //public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        //{
-        //    //参数校验
-        //    if (!context.ModelState.IsValid)
-        //    {
-        //        var errorMsg = context.ModelState.Values.SelectMany(c => c.Errors).Select(c => c.ErrorMessage)
-        //            .FirstOrDefault();
-        //        context.Result = new OkObjectResult(new ResponseResult<string>
-        //        {
-        //            Code = ResponseStatusEnum.Fail,
-        //            Msg = errorMsg,
-        //            Data = ""
-        //        });
-        //        return base.OnActionExecutionAsync(context, next);
-        //    }
-
-
-        //    //用户授权
-        //    var desc = (ControllerActionDescriptor)context.ActionDescriptor;
-        //    var action = desc.MethodInfo.GetCustomAttributes(typeof(ActionAttribute), false).FirstOrDefault() as ActionAttribute;
-        //    if (action == null) return base.OnActionExecutionAsync(context, next);
-        //    var userInfo = JwtHelper.GetUserInfo(context.HttpContext);
-
-        //    if (userInfo == null)
-        //    {
-        //        var result = new ResponseResult<string>
-        //        {
-        //            Msg = "请先登录",
-        //            Code = ResponseStatusEnum.Unauthorized
-        //        };
-        //        context.HttpContext.Response.ContentType = "application/json";
-        //        context.HttpContext.Response.StatusCode = 401;
-        //        context.HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result));
-        //        return base.OnActionExecutionAsync(context, next);
-        //    }
-
-        //    // var actionList = _memoryCache.Get<List<MenuAction>>(userInfo.Account);
-        //    var key = EncryptHelper.Hash256Encrypt(userInfo.Account);
-
-        //    var actionList = MemoryCacheHelper.Cache.Get<List<MenuAction>>(key);
-        //    if (actionList == null)
-        //    {
-        //        actionList = _roleActonBll.GetRoleAction(userInfo.RoleId, userInfo.UserType == UserType.Administrator).Result;
-        //        //将用户权限放进缓存中，缓存默认30分钟动态过期
-        //        // _memoryCache.Set(userInfo.Account, actionList);
-        //        MemoryCacheHelper.Cache.Set(key, actionList);
-        //    }
-        //    if (actionList.Find(c => c.Code.Equals(action.Code)) == null && userInfo.UserType != UserType.Administrator)
-        //    {
-        //        var result = new ResponseResult<string>
-        //        {
-        //            Msg = "没有权限访问该资源",
-        //            Code = ResponseStatusEnum.Forbidden
-        //        };
-        //        context.HttpContext.Response.ContentType = "application/json";
-        //        context.HttpContext.Response.StatusCode = 403;
-        //        context.HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result));
-        //        Log.Warning($"【{userInfo.Account}】试图访问【{action.Code}】被拒绝，没有权限！");
-        //    }
-        //    else
-        //    {
-        //        //这样每次访问都会被记录在日志里面
-        //        Log.Information($"【{userInfo.Account}】访问【{action.Code}】成功");
-        //    }
-        //    return base.OnActionExecutionAsync(context, next);
-        //}
-
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -111,7 +38,7 @@ namespace API.Core.Filters
             {
                 var errorMsg = context.ModelState.Values.SelectMany(c => c.Errors).Select(c => c.ErrorMessage)
                     .FirstOrDefault();
-                context.Result = new BadRequestObjectResult(new ResponseResult<string>
+                context.Result = new BadRequestObjectResult(new
                 {
                     Code = ResponseStatusEnum.BadRequest,
                     Msg = errorMsg,
@@ -152,14 +79,6 @@ namespace API.Core.Filters
             }
             if (actionList.Find(c => c.Code.Equals(action.Code)) == null && userInfo.UserType != UserType.Administrator)
             {
-                //var result = new ResponseResult<string>
-                //{
-                //    Msg = "没有权限访问该资源",
-                //    Code = ResponseStatusEnum.Forbidden
-                //};
-                //context.HttpContext.Response.ContentType = "application/json";
-                //context.HttpContext.Response.StatusCode = 403;
-                //context.HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result));
                 context.Result = new ForbidResult();
 
                 Log.Warning($"【{userInfo.Account}】试图访问【{action.Code}】被拒绝，没有权限！");

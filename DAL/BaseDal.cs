@@ -54,10 +54,34 @@ namespace DAL
 
         public async Task<bool> AddAsync(T model)
         {
-            var entity = _dbContext.Set<T>().AddAsync(model).AsTask().Result.Entity;
+            await _dbContext.Set<T>().AddAsync(model);
             return await _dbContext.SaveChangesAsync() > 0;
 
         }
+
+        /// <summary>
+        /// 批量添加
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public bool Add(List<T> list)
+        {
+            _dbContext.Set<T>().AddRange(list);
+            return _dbContext.SaveChanges() > 0;
+        }
+
+        /// <summary>
+        /// 异步批量添加
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public async Task<bool> AddAsync(List<T> list)
+        {
+            await _dbContext.Set<T>().AddRangeAsync(list);
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
+
+
 
         /// <summary>
         /// 硬删除
@@ -66,7 +90,7 @@ namespace DAL
         /// <returns></returns>
         public bool Delete(Expression<Func<T, bool>> whereLambda)
         {
-            var list = _dbContext.Set<T>().Where(whereLambda).ToList();
+            var list = _dbContext.Set<T>().Where(whereLambda);
             _dbContext.Set<T>().RemoveRange(list);
             return _dbContext.SaveChanges() > 0;
 
@@ -102,9 +126,9 @@ namespace DAL
         /// <returns></returns>
         public async Task<bool> EditAsync(T model)
         {
-            var entity = _dbContext.Set<T>().Update(model).Entity;
-            var m = await _dbContext.SaveChangesAsync();
-            return m > 0;
+            _dbContext.Set<T>().Update(model);
+
+            return await _dbContext.SaveChangesAsync() > 0;
         }
 
         /// <summary>
@@ -116,19 +140,7 @@ namespace DAL
         public async Task<bool> EditAsync<TProperty>(T model, Expression<Func<T, TProperty>> propertyExpression)
         {
             _dbContext.Entry(model).Property(propertyExpression).IsModified = true;
-            var count = await _dbContext.SaveChangesAsync();
-            //并发了
-            if (count != -1) return count > 0;
-            //再执行10次
-            for (var i = 0; i < 10; i++)
-            {
-                if (await EditAsync(model, propertyExpression))
-                {
-                    return true;
-                }
-            }
-            return false;
-
+            return await _dbContext.SaveChangesAsync() > 0;
         }
 
 

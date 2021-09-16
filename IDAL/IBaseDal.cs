@@ -109,6 +109,24 @@ namespace IDAL
         /// <returns></returns>
         Task<bool> AddAsync(T model);
 
+
+        /// <summary>
+        /// 批量添加
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        bool Add(List<T> list);
+
+
+        /// <summary>
+        /// 异步批量添加
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        Task<bool> AddAsync(List<T> list);
+
+
+
         /// <summary>
         /// 执行sql语句
         /// </summary>

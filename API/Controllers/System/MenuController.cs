@@ -1,18 +1,18 @@
-﻿using System;
-using API.Core.Filters;
+﻿using API.Core.Filters;
 using API.Core.JWT;
 using API.ViewModel;
 using API.ViewModel.Menu;
 using Common.Enum;
+using Common.I18n;
 using IBLL.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Models.System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Common.Language;
-using Microsoft.Extensions.Localization;
 
 
 namespace API.Controllers.System
@@ -163,21 +163,19 @@ namespace API.Controllers.System
             {
                 Msg = "提交失败"
             };
-            if (await _roleActonBll.DeleteAsync(c => c.RoleId == model.RoleId))
+            if (!await _roleActonBll.DeleteAsync(c => c.RoleId == model.RoleId)) return result;
+            foreach (var i in model.ActionIds)
             {
-                foreach (var i in model.ActionIds)
+                var roleAction = new RoleAction
                 {
-                    var roleAction = new RoleAction
-                    {
-                        ActionId = i,
-                        RoleId = model.RoleId
-                    };
-                    await _roleActonBll.AddAsync(roleAction);
-                }
-
-                result.Msg = "提交成功";
-                result.Code = ResponseStatusEnum.Ok;
+                    ActionId = i,
+                    RoleId = model.RoleId
+                };
+                await _roleActonBll.AddAsync(roleAction);
             }
+
+            result.Msg = "提交成功";
+            result.Code = ResponseStatusEnum.Ok;
 
             return result;
         }
@@ -199,7 +197,7 @@ namespace API.Controllers.System
             return await AddOrEditMenuCallback(OperationType.Edit, menu[0]);
         }
 
-
+        [HttpGet(nameof(SetMenuStatus)), Action("Menu.SetMenuStatus")]
         public async Task<IActionResult> SetMenuStatus(int id, EnableEnum status)
         {
             var menu = await _menuActionBll.GetListAsync(c => c.Id == id);
