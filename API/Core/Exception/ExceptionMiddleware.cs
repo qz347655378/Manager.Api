@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Serilog;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Core.Exception
 {
@@ -34,10 +35,22 @@ namespace API.Core.Exception
 
         private static async Task ExceptionHandleAsync(HttpContext context, System.Exception exception)
         {
+
+            Log.Error(exception, exception.Message);
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = 400;
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(new { code = ResponseStatusEnum.BadRequest, msg = "" }));
+        }
+
+
+        private static void ExceptionHandle(HttpContext context, System.Exception exception)
+        {
+
             Log.Error(exception, exception.Message);
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = 400;
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(new { code = ResponseStatusEnum.BadRequest, msg = exception.Message }));
+
         }
     }
 }

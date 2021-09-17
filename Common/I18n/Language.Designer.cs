@@ -214,6 +214,15 @@ namespace Common.I18n {
         }
         
         /// <summary>
+        ///   查找类似 已存在相同的登录账号 的本地化字符串。
+        /// </summary>
+        public static string UniqueAccount {
+            get {
+                return ResourceManager.GetString("UniqueAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 用户类型 的本地化字符串。
         /// </summary>
         public static string UserType {

@@ -167,6 +167,13 @@
             <param name="roleId">角色ID</param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.System.UserController.GetUserById(System.Int32)">
+            <summary>
+            根据Id获取用户信息
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.System.UserController.Add(Models.System.UserInfo)">
             <summary>
             添加普通用户
@@ -174,7 +181,7 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.System.UserController.Edit(API.ViewModel.System.AddOrEditUserViewModel)">
+        <member name="M:API.Controllers.System.UserController.Edit(Models.System.UserInfo)">
             <summary>
             编辑用户
             </summary>

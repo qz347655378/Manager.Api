@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Common.I18n;
+
 
 namespace Models.System
 {
@@ -19,28 +21,32 @@ namespace Models.System
         /// 账号
         /// </summary>
         [Required(ErrorMessageResourceName = "AccountRequiredError", ErrorMessageResourceType = typeof(Common.I18n.Language)), MaxLength(50)]
+        [Comment("账号")]
         public string Account { get; set; }
 
         /// <summary>
         /// 昵称
         /// </summary>
         [Required(ErrorMessageResourceName = "NicknameRequiredError", ErrorMessageResourceType = typeof(Common.I18n.Language)), MaxLength(50)]
+        [Comment("昵称")]
         public string Nickname { get; set; }
 
         /// <summary>
         /// 用户类型
         /// </summary>
+        [Comment("用户类型")]
         public UserType UserType { get; set; } = UserType.Ordinary;
 
         /// <summary>
         /// 密码 默认密码123456
         /// </summary>
-        [Required(ErrorMessageResourceName = "PasswordRequiredError", ErrorMessageResourceType = typeof(Common.I18n.Language)), MaxLength(256)]
+        [Comment("密码")]
+        [MaxLength(256)]
         public string Password { get; set; } = EncryptHelper.Hash256Encrypt("123456");
         /// <summary>
         /// 联系电话
         /// </summary>
-        [MaxLength(20)]
+        [MaxLength(20), Comment("手机号码")]
         public string Mobile { get; set; }
         /// <summary>
         /// 最后一次登录时的IP
@@ -56,6 +62,7 @@ namespace Models.System
         /// <summary>
         /// 最后一次登录时间
         /// </summary>
+        [Comment("最后一次登录时间")]
         public DateTime? LastLoginTime { get; set; }
 
 

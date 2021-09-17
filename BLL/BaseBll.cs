@@ -125,14 +125,26 @@ namespace BLL
 
 
         /// <summary>
-        /// 异步编辑,只更新部分
+        /// 异步编辑
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="propertyExpression"></param>
+        /// <param name="noChangeProperty">不需要更新的字段合集</param>
         /// <returns></returns>
-        public async Task<bool> EditAsync<TProperty>(T model, Expression<Func<T, TProperty>> propertyExpression)
+        public async Task<bool> EditAsync(T model, List<string> noChangeProperty)
         {
-            return await _currentDal.EditAsync(model, propertyExpression);
+            return await _currentDal.EditAsync(model, noChangeProperty);
+        }
+
+
+        /// <summary>
+        /// 编辑
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="noChangeProperty">不需要更新的字段合集</param>
+        /// <returns></returns>
+        public bool Edit(T model, List<string> noChangeProperty)
+        {
+            return _currentDal.Edit(model, noChangeProperty);
         }
 
 

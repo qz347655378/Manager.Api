@@ -263,6 +263,11 @@
               查找类似 未认证用户 的本地化字符串。
             </summary>
         </member>
+        <member name="P:Common.I18n.Language.UniqueAccount">
+            <summary>
+              查找类似 已存在相同的登录账号 的本地化字符串。
+            </summary>
+        </member>
         <member name="P:Common.I18n.Language.UserType">
             <summary>
               查找类似 用户类型 的本地化字符串。

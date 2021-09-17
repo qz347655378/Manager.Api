@@ -140,7 +140,42 @@ namespace DAL
         public async Task<bool> EditAsync<TProperty>(T model, Expression<Func<T, TProperty>> propertyExpression)
         {
             _dbContext.Entry(model).Property(propertyExpression).IsModified = true;
+
             return await _dbContext.SaveChangesAsync() > 0;
+        }
+
+
+        /// <summary>
+        /// 异步编辑
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="noChangeProperty">不需要更新的字段合集</param>
+        /// <returns></returns>
+        public async Task<bool> EditAsync(T model, List<string> noChangeProperty)
+        {
+            _dbContext.Set<T>().Update(model);
+            foreach (var property in noChangeProperty)
+            {
+                _dbContext.Entry(model).Property(property).IsModified = false;
+            }
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
+
+
+        /// <summary>
+        /// 编辑
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="noChangeProperty">不需要更新的字段合集</param>
+        /// <returns></returns>
+        public bool Edit(T model, List<string> noChangeProperty)
+        {
+            _dbContext.Set<T>().Update(model);
+            foreach (var property in noChangeProperty)
+            {
+                _dbContext.Entry(model).Property(property).IsModified = false;
+            }
+            return _dbContext.SaveChanges() > 0;
         }
 
 

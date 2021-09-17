@@ -83,15 +83,23 @@ namespace IDAL
         Task<bool> EditAsync(T model);
 
 
+
         /// <summary>
-        /// 异步编辑,只更新部分
+        /// 异步编辑
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="propertyExpression"></param>
+        /// <param name="noChangeProperty">不需要更新的字段合集</param>
         /// <returns></returns>
-        Task<bool> EditAsync<TProperty>(T model, Expression<Func<T, TProperty>> propertyExpression);
+        Task<bool> EditAsync(T model, List<string> noChangeProperty);
 
 
+        /// <summary>
+        /// 编辑
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="noChangeProperty">不需要更新的字段合集</param>
+        /// <returns></returns>
+        bool Edit(T model, List<string> noChangeProperty);
 
 
 
