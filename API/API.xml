@@ -24,6 +24,12 @@
             <param name="model"></param>
             <returns>返回token及token过期时间</returns>
         </member>
+        <member name="M:API.Controllers.LoginController.Logout">
+            <summary>
+            登出
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.LoginController.GetCaptcha">
             <summary>
             获取验证码
@@ -58,6 +64,13 @@
             根据菜单父ID获取菜单列表
             </summary>
             <param name="menuParentId">菜单父Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.System.MenuController.GetMenuById(System.Int32)">
+            <summary>
+            根据ID获取菜单信息
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="M:API.Controllers.System.MenuController.GetMenuList(System.Int32)">
@@ -100,9 +113,17 @@
             <param name="id">菜单ID</param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.System.MenuController.SetMenuStatus(System.Int32,Common.Enum.EnableEnum)">
+            <summary>
+            设置菜单状态
+            </summary>
+            <param name="id"></param>
+            <param name="status"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.System.MenuController.AddOrEditMenuCallback(Common.Enum.OperationType,Models.System.MenuAction)">
             <summary>
-            编辑获取添加菜单
+            编辑或添加菜单
             </summary>
             <param name="type"></param>
             <param name="model"></param>
@@ -157,7 +178,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.System.UserController.GetUserInfo(System.Int32,System.Int32,System.String,System.Int32)">
+        <member name="M:API.Controllers.System.UserController.GetUserInfo(System.Int32,System.Int32,System.String,System.Nullable{System.Int32})">
             <summary>
             获取所有未删除用户
             </summary>

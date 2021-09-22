@@ -45,5 +45,24 @@ namespace BLL.System
 
             return roleActions;
         }
+
+        /// <summary>
+        /// 添加角色权限
+        /// </summary>
+        /// <param name="roleId">角色ID</param>
+        /// <param name="actions">权限ID集合</param>
+        /// <returns></returns>
+        public async Task<bool> AddRoleMenu(int roleId, List<int> actions)
+        {
+            var roleActions = await GetListAsync(c => c.RoleId == roleId);
+            if (roleActions.Any())
+            {
+                await DeleteAsync(c => c.RoleId == roleId);
+            }
+            var list = actions.Select(action => new RoleAction { ActionId = action, RoleId = roleId }).ToList();
+
+            return await AddAsync(list);
+        }
+
     }
 }

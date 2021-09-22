@@ -39,7 +39,7 @@ namespace API.Controllers.System
         /// <param name="roleId">角色ID</param>
         /// <returns></returns>
         [HttpGet(nameof(GetUserInfo)), Action("User.Read")]
-        public async Task<ResponseResult<TableData<UserInfo>>> GetUserInfo(int page, int limit, string userName, int roleId)
+        public async Task<ResponseResult<TableData<UserInfo>>> GetUserInfo(int page, int limit, string userName, int? roleId)
         {
             var result = new ResponseResult<TableData<UserInfo>>
             {
@@ -55,8 +55,22 @@ namespace API.Controllers.System
                     userName = "";
                 }
 
-                var list2 = _userInfoBll.GetList(c => c.IsDelete == 0 && (c.Account.Contains(userName) || c.RoleId == roleId)).Include(c => c.RoleInfo);
-                var list = await list2.OrderBy(c => c.Id).Skip((page - 1) * page).Take(limit).ToListAsync();
+
+
+                var list2 = _userInfoBll.GetList(c => c.IsDelete == 0);
+
+
+                if (!string.IsNullOrEmpty(userName))
+                {
+                    list2 = list2.Where(c => c.Nickname.Contains(userName));
+                }
+
+                if (roleId != null && roleId != 0)
+                {
+                    list2 = list2.Where(c => c.RoleId == roleId);
+                }
+
+                var list = await list2.Include(c => c.RoleInfo).OrderBy(c => c.Id).Skip((page - 1) * page).Take(limit).ToListAsync();
                 result.Data = new TableData<UserInfo>
                 {
                     CurrentPage = page,

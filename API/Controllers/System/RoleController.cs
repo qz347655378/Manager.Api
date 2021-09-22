@@ -99,7 +99,7 @@ namespace API.Controllers.System
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost(nameof(EditRole)), Action("Role.Edit")]
-        public async Task<IActionResult> EditRole([FromForm] RoleInfo model)
+        public async Task<IActionResult> EditRole([FromBody] RoleInfo model)
         {
             var temp = await _roleInfoBll.GetListAsync(c => c.Id == model.Id);
             if (!temp.Any()) return NotFound(_localizer["NotFound"].Value);

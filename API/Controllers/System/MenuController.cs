@@ -77,6 +77,19 @@ namespace API.Controllers.System
             return result;
         }
 
+        /// <summary>
+        /// 根据ID获取菜单信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet(nameof(GetMenuById)), Action("Menu.Read")]
+        public async Task<IActionResult> GetMenuById(int id)
+        {
+            var menu = await _menuActionBll.GetListAsync(c => c.Id == id);
+            if (!menu.Any()) return NotFound(_localizer["NotFound"]);
+            return Ok(menu[0]);
+        }
+
 
 
         /// <summary>
@@ -157,27 +170,9 @@ namespace API.Controllers.System
         /// </summary>
         /// <returns></returns>
         [HttpPost(nameof(EditRoleMenu)), Action("Menu.EditRoleMenu")]
-        public async Task<ResponseResult<string>> EditRoleMenu([FromBody] RoleActionViewModel model)
+        public async Task<IActionResult> EditRoleMenu([FromBody] RoleActionViewModel model)
         {
-            var result = new ResponseResult<string>
-            {
-                Msg = "提交失败"
-            };
-            if (!await _roleActonBll.DeleteAsync(c => c.RoleId == model.RoleId)) return result;
-            foreach (var i in model.ActionIds)
-            {
-                var roleAction = new RoleAction
-                {
-                    ActionId = i,
-                    RoleId = model.RoleId
-                };
-                await _roleActonBll.AddAsync(roleAction);
-            }
-
-            result.Msg = "提交成功";
-            result.Code = ResponseStatusEnum.Ok;
-
-            return result;
+            return await _roleActonBll.AddRoleMenu(model.RoleId, model.ActionIds) ? (ActionResult)Ok(_localizer["OK"].Value) : BadRequest(_localizer["BadRequest"].Value);
         }
 
 
@@ -189,6 +184,9 @@ namespace API.Controllers.System
         [HttpGet(nameof(Remove)), Action("Menu.Remove")]
         public async Task<IActionResult> Remove(int id)
         {
+
+            var child = await _menuActionBll.GetListAsync(c => c.ParentId == id && c.IsDelete == DeleteStatus.NoDelete);
+            if (child.Any()) return BadRequest("还有子菜单，禁止删除");
             var menu = await _menuActionBll.GetListAsync(c => c.Id == id);
             if (!menu.Any()) return NotFound(_localizer["NotFound"]);
             menu[0].IsDelete = DeleteStatus.Delete;
@@ -197,6 +195,12 @@ namespace API.Controllers.System
             return await AddOrEditMenuCallback(OperationType.Edit, menu[0]);
         }
 
+        /// <summary>
+        /// 设置菜单状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         [HttpGet(nameof(SetMenuStatus)), Action("Menu.SetMenuStatus")]
         public async Task<IActionResult> SetMenuStatus(int id, EnableEnum status)
         {
@@ -209,7 +213,7 @@ namespace API.Controllers.System
 
 
         /// <summary>
-        /// 编辑获取添加菜单
+        /// 编辑或添加菜单
         /// </summary>
         /// <param name="type"></param>
         /// <param name="model"></param>
@@ -219,12 +223,12 @@ namespace API.Controllers.System
             return type switch
             {
                 OperationType.Add => await _menuActionBll.AddAsync(model)
-                    ? (ActionResult)Ok(_localizer["OK"])
-                    : BadRequest(_localizer["BadRequest"]),
+                    ? (ActionResult)Ok(_localizer["OK"].Value)
+                    : BadRequest(_localizer["BadRequest"].Value),
                 OperationType.Edit => await _menuActionBll.EditAsync(model)
-                    ? (ActionResult)Ok(_localizer["OK"])
-                    : BadRequest(_localizer["BadRequest"]),
-                _ => BadRequest(_localizer["BadRequest"])
+                    ? (ActionResult)Ok(_localizer["OK"].Value)
+                    : BadRequest(_localizer["BadRequest"].Value),
+                _ => BadRequest(_localizer["BadRequest"].Value)
             };
         }
 

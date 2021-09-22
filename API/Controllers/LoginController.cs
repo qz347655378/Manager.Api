@@ -23,12 +23,12 @@ namespace API.Controllers
     public class LoginController : BaseController
     {
         private readonly IUserInfoBll _userInfoBll;
-       // private readonly IMemoryCache _memoryCache;
+        // private readonly IMemoryCache _memoryCache;
 
         public LoginController(IUserInfoBll userInfoBll/*, IMemoryCache memoryCache*/)
         {
             _userInfoBll = userInfoBll;
-           // _memoryCache = memoryCache;
+            // _memoryCache = memoryCache;
         }
         /// <summary>
         /// 用户登录
@@ -105,6 +105,19 @@ namespace API.Controllers
 
             return result;
         }
+
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(nameof(Logout)), Authorize]
+        public IActionResult Logout()
+        {
+            var user = GetUserByJwtToken();
+            MemoryCacheHelper.Cache.Remove(user.Account);
+            return Ok();
+        }
+
 
         /// <summary>
         /// 获取验证码
